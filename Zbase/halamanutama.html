@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Klinik</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/halamanutama.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><img src="property/siklin.png"></li>
+                <li style="font-size:xx-large; margin-top: 25px">SISTEM INFORMASI KLINIK</li> 
+                <li><img src="property/desplsteks.png"></li>           
+            </ul>
+        </nav>
+    </header>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="datapengguna.html">
+                <h1>Buat ID baru</h1>
+                <input type="text" placeholder="Name" />
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <input type="akses" placeholder="Access" />
+                <button>Daftar</button>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form action="page2.html">
+                <h1>Halaman Masuk</h1><br>
+                <input type="id" placeholder="ID" />
+                <input type="password" placeholder="Password" />
+                <button>Masuk</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Daftar atau Buat akun SiKLIN!</h1>
+                    <p>isi sesuai dengan data personal anda</p>
+                    <button class="ghost" id="signIn">Punya Akun?</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Selamat Datang di SIKLIN!</h1>
+                    <p style="text-align: left; margin-left: 20px;">Sistem Informasi Klinik sederhana
+                        dikembangkan oleh mahasiswa 3A
+                        Rekam Medis dan Informasi Kesehatan 
+                        Poltekkes Kemenkes Tasikmalaya</p>
+                    <button class="ghost" id="signUp">Lupa ID atau Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="jawas/main.js"></script>
+</body>
+</html>

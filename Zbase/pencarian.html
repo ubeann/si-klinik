@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/c2dc05efdd.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/pencarian.css">
+    <title>Data Pasien</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><img src="property/siklin.png"></li>
+                <li><a href="page2.html"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="70" viewBox="0 0 30 20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+    <div class="header">
+        <a href="pendaftaran.html"><button>Buka Form</button></a>
+        <input type="text" placeholder="Pencarian..." id="searchInput" onkeyup="filterTable()">
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>No. RM</th>
+                <th>Nama Pasien</th>
+                <th>Tgl. Lahir</th>
+                <th>Jenis Kelamin</th>
+                <th>Alamat</th>
+                <th>Agama</th>
+                <th>Tgl. Daftar</th>
+                <th>Telepon</th>
+            </tr>
+        </thead>
+        <tbody id="patientTable">
+            <tr>
+                <td>001</td>
+                <td>John Doe</td>
+                <td>01-01-1990</td>
+                <td>Laki-laki</td>
+                <td>Jalan A No.1</td>
+                <td>Islam</td>
+                <td>13-07-2024</td>
+                <td>08123456789</td>
+            </tr>
+            <tr>
+                <td>002</td>
+                <td>Jane Smith</td>
+                <td>02-02-1992</td>
+                <td>Perempuan</td>
+                <td>Jalan B No.2</td>
+                <td>Kristen</td>
+                <td>14-07-2024</td>
+                <td>08123456780</td>
+            </tr>
+            <tbody id="patientTable">
+                <tr>
+                    <td>001</td>
+                    <td>John Doe</td>
+                    <td>01-01-1990</td>
+                    <td>Laki-laki</td>
+                    <td>Jalan A No.1</td>
+                    <td>Islam</td>
+                    <td>13-07-2024</td>
+                    <td>08123456789</td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>Jane Smith</td>
+                    <td>02-02-1992</td>
+                    <td>Perempuan</td>
+                    <td>Jalan B No.2</td>
+                    <td>Kristen</td>
+                    <td>14-07-2024</td>
+                    <td>08123456780</td>
+                </tr>
+                <tbody id="patientTable">
+                    <tr>
+                        <td>001</td>
+                        <td>John Doe</td>
+                        <td>01-01-1990</td>
+                        <td>Laki-laki</td>
+                        <td>Jalan A No.1</td>
+                        <td>Islam</td>
+                        <td>13-07-2024</td>
+                        <td>08123456789</td>
+                    </tr>
+                    <tr>
+                        <td>002</td>
+                        <td>Jane Smith</td>
+                        <td>02-02-1992</td>
+                        <td>Perempuan</td>
+                        <td>Jalan B No.2</td>
+                        <td>Kristen</td>
+                        <td>14-07-2024</td>
+                        <td>08123456780</td>
+                    </tr>
+                    <tbody id="patientTable">
+                        <tr>
+                            <td>001</td>
+                            <td>John Doe</td>
+                            <td>01-01-1990</td>
+                            <td>Laki-laki</td>
+                            <td>Jalan A No.1</td>
+                            <td>Islam</td>
+                            <td>13-07-2024</td>
+                            <td>08123456789</td>
+                        </tr>
+                        <tr>
+                            <td>002</td>
+                            <td>Jane Smith</td>
+                            <td>02-02-1992</td>
+                            <td>Perempuan</td>
+                            <td>Jalan B No.2</td>
+                            <td>Kristen</td>
+                            <td>14-07-2024</td>
+                            <td>08123456780</td>
+                        </tr>
+                        <tbody id="patientTable">
+                            <tr>
+                                <td>001</td>
+                                <td>John Doe</td>
+                                <td>01-01-1990</td>
+                                <td>Laki-laki</td>
+                                <td>Jalan A No.1</td>
+                                <td>Islam</td>
+                                <td>13-07-2024</td>
+                                <td>08123456789</td>
+                            </tr>
+                            <tr>
+                                <td>002</td>
+                                <td>Jane Smith</td>
+                                <td>02-02-1992</td>
+                                <td>Perempuan</td>
+                                <td>Jalan B No.2</td>
+                                <td>Kristen</td>
+                                <td>14-07-2024</td>
+                                <td>08123456780</td>
+                            </tr>
+                            <tbody id="patientTable">
+                                <tr>
+                                    <td>001</td>
+                                    <td>John Doe</td>
+                                    <td>01-01-1990</td>
+                                    <td>Laki-laki</td>
+                                    <td>Jalan A No.1</td>
+                                    <td>Islam</td>
+                                    <td>13-07-2024</td>
+                                    <td>08123456789</td>
+                                </tr>
+                                <tr>
+                                    <td>002</td>
+                                    <td>Jane Smith</td>
+                                    <td>02-02-1992</td>
+                                    <td>Perempuan</td>
+                                    <td>Jalan B No.2</td>
+                                    <td>Kristen</td>
+                                    <td>14-07-2024</td>
+                                    <td>08123456780</td>
+                                </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <button onclick="previousPage()">&lt;</button>
+        <span id="pageInfo">1 - 15</span>
+        <button onclick="nextPage()">&gt;</button>
+    </div>
+</div>
+
+<script>
+    function openForm() {
+        alert("Form Buka");
+        // You can redirect or open a form here
+    }
+
+    // Function to filter the patient table based on search input
+    function filterTable() {
+        const searchInput = document.getElementById('searchInput').value.toUpperCase();
+        const table = document.getElementById('patientTable');
+        const rows = table.getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            let cells = rows[i].getElementsByTagName('td');
+            let match = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                if (cells[j]) {
+                    if (cells[j].innerText.toUpperCase().indexOf(searchInput) > -1) {
+                        match = true;
+                    }
+                }
+            }
+            rows[i].style.display = match ? "" : "none";
+        }
+    }
+
+    let currentPage = 1;
+    const rowsPerPage = 15;
+
+    function updatePagination() {
+        const table = document.getElementById('patientTable');
+        const rows = table.getElementsByTagName('tr');
+        const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].style.display = (i >= (currentPage - 1) * rowsPerPage && i < currentPage * rowsPerPage) ? "" : "none";
+        }
+
+        document.getElementById('pageInfo').textContent = 
+  `${(currentPage - 1) * rowsPerPage + 1} - ${Math.min(currentPage * rowsPerPage, rows.length)}`;
+    }
+
+    function nextPage() {
+        const table = document.getElementById('patientTable');
+        const rows = table.getElementsByTagName('tr');
+        const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+        if (currentPage < totalPages) {
+            currentPage++;
+            updatePagination();
+        }
+    }
+
+    function previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            updatePagination();
+        }
+    }
+
+    window.onload = function() {
+        updatePagination();
+    }
+</script>
+</body>
+</html>
