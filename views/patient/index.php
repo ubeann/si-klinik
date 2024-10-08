@@ -41,14 +41,17 @@ use function App\Helpers\route;
                 <form action="<?= route('patients') ?>" method="get">
                     <label for="status">Filter:</label>
                     <select name="status" id="status">
-                        <option value="all" <?= $_GET['status'] === 'all' ? 'selected' : '' ?>>
+                        <option value="all" <?= ($_GET['status'] ?? null) === 'all' ? 'selected' : '' ?>>
                             Semua
                         </option>
-                        <option value="active" <?= $_GET['status'] === 'active' ? 'selected' : '' ?>>
-                            Aktif
+                        <option value="not-filled" <?= ($_GET['status'] ?? null) === 'not-filled' ? 'selected' : '' ?>>
+                            Belum Diisi
                         </option>
-                        <option value="inactive" <?= $_GET['status'] === 'inactive' ? 'selected' : '' ?>>
-                            Tidak Aktif
+                        <option value="incomplete" <?= ($_GET['status'] ?? null) === 'incomplete' ? 'selected' : '' ?>>
+                            Belum Dilengkapi
+                        </option>
+                        <option value="complete" <?= ($_GET['status'] ?? null) === 'complete' ? 'selected' : '' ?>>
+                            Lengkap
                         </option>
                     </select>
                     <input type="text" placeholder="Pencarian..." name="search" value="<?= $_GET['search'] ?? '' ?>">
@@ -63,7 +66,7 @@ use function App\Helpers\route;
                     <th>Nama Pasien</th>
                     <th>Tgl. Lahir</th>
                     <th>Jenis Kelamin</th>
-                    <th>Alamat</th>
+                    <th width="200px">Alamat</th>
                     <th>Agama</th>
                     <th>Tgl. Daftar</th>
                     <th>Telepon</th>
@@ -85,12 +88,12 @@ use function App\Helpers\route;
                         <td><?= $patient['phone_number'] ?></td>
                         <td><?= $patient['national_id_number'] ?></td>
                         <td>
-                            <?php if ($patient['status'] === 'BELUM DIISI') : ?>
-                                <a href="<?= route('resume', ['id' => $patient['id']]) ?>" style="color: red; text-decoration: underline"><?= $patient['status'] ?></a>
-                            <?php elseif ($patient['status'] === 'BELUM ADA KODE') : ?>
-                                <a href="<?= route('indexresume', ['id' => $patient['id']]) ?>" style="color: yellow; text-decoration: underline"><?= $patient['status'] ?></a>
+                            <?php if ($patient['status'] === 'not-filled') : ?>
+                                <a href="<?= route('resume', ['id' => $patient['id']]) ?>" style="color: red; text-decoration: underline">Belum Diisi</a>
+                            <?php elseif ($patient['status'] === 'belum dilengkapi') : ?>
+                                <a href="<?= route('indexresume', ['id' => $patient['id']]) ?>" style="color: yellow; text-decoration: underline">Belum Dilengkapi</a>
                             <?php else : ?>
-                                <a href="<?= route('indexresume', ['id' => $patient['id']]) ?>" style="color: green; text-decoration: underline"><?= $patient['status'] ?></a>
+                                <a href="<?= route('indexresume', ['id' => $patient['id']]) ?>" style="color: green; text-decoration: underline">Lengkap</a>
                             <?php endif ?>
                         </td>
                         <td>

@@ -31,7 +31,7 @@ class Patient extends Model
     private const VALID_RELIGIONS = ['islam', 'catholic', 'protestant', 'hindu', 'buddha', 'other']; // Valid religion options
     private const VALID_EDUCATION_LEVELS = ['sd', 'smp', 'sma', 'd1', 'd2', 'd3', 'd4', 's1', 's2', 's3']; // Valid education levels
     private const VALID_MARITAL_STATUS = ['single', 'married', 'divorced', 'widowed']; // Valid marital status options
-    private const VALID_STATUS = ['active', 'inactive', 'deceased']; // Valid status options for a patient
+    private const VALID_STATUS = ['not-filled', 'incomplete', 'complete']; // Valid status options
 
     /**
      * Get all patients with optional filtering and pagination
@@ -155,7 +155,7 @@ class Patient extends Model
         $this->occupation = $this->sanitizeString($data['occupation'] ?? '');
         $this->education = strtolower($this->sanitizeString($data['education'] ?? ''));
         $this->maritalStatus = strtolower($this->sanitizeString($data['marital_status'] ?? ''));
-        $this->status = strtolower($this->sanitizeString($data['status'] ?? 'active')); // Default status is active
+        $this->status = strtolower($this->sanitizeString($data['status'] ?? 'not-filled'));
     }
 
     /**

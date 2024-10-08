@@ -32,16 +32,15 @@ use function App\Helpers\route;
 
     <h1>Form Pendaftaran Pasien Baru</h1>
 
+    <?php if (isset($_SESSION['errors'])) : ?>
     <div class="errors">
-        <?php if (isset($_SESSION['errors'])) : ?>
             <ol>
                 <?php foreach ($_SESSION['errors'] as $error) : ?>
                     <li><?= $error ?></li>
                 <?php endforeach ?>
             </ol>
-        <?php endif ?>
     </div>
-
+    <?php endif ?>
     <form method="POST" action="<?= route('patients/register') ?>">
         <div class="form-group">
             <label for="medical_record_number">Nomer RM</label>

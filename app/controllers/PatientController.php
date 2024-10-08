@@ -102,6 +102,9 @@ class PatientController extends Controller
             exit;
         }
 
+        // Remove any existing errors from the session
+        unset($_SESSION['errors']);
+
         // Initialize an instance of the Patient model
         $patient = new Patient();
 
