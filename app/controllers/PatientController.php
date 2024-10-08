@@ -102,9 +102,6 @@ class PatientController extends Controller
             exit;
         }
 
-        // Remove any existing errors from the session
-        unset($_SESSION['errors']);
-
         // Initialize an instance of the Patient model
         $patient = new Patient();
 
@@ -126,6 +123,77 @@ class PatientController extends Controller
         // Save the patient record to the database
         $patient->create();
 
+        // Create a success message
+        $_SESSION['success'] = 'Patient record created successfully.';
+
+        // Redirect to the patient list page
+        header('Location: '. '/patients');
+        exit;
+    }
+
+    /**
+     * Display the patient edit form.
+     *
+     * This method handles the "edit" action for the patient page.
+     * It retrieves the patient record with the specified ID from the database
+     * and displays the patient edit form.
+     *
+     * @return void
+     */
+    public function editForm(): void {
+        // Initialize an instance of the Patient model
+        $patient = new Patient();
+
+        // Get the patient record with the specified ID
+        $patient->load($_GET['id']);
+
+        // Render the patient edit form view (located in the 'views/patient/edit.php' file).
+        $this->view('patient/edit', ['patient' => $patient, 'id' => $_GET['id']]);
+    }
+
+    /**
+     * Update a patient record.
+     *
+     * This method handles the "edit" action for the patient edit form.
+     * It processes the form submission, validates the input data, and updates
+     * the patient record with the specified ID in the database.
+     *
+     * @return void
+     */
+    public function edit(): void {
+        // Redirect to the form registration page when the method is not POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: '. '/patients/form-edit?id=' . $_GET['id']);
+            exit;
+        }
+
+        // Initialize an instance of the Patient model
+        $patient = new Patient();
+
+        // Get the patient record with the specified ID
+        $patient->load($_GET['id']);
+
+        // Set properties of the patient object
+        $patient->setProperties($_POST);
+
+        // Validate the form data
+        $errors = $patient->validate($_POST);
+
+        // When there are validation errors, store the errors in the session
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+
+            // Redirect back to the patient edit form
+            header('Location: '. '/patients/form-edit?id=' . $_GET['id']);
+            exit;
+        }
+
+        // Update the patient record in the database
+        $patient->update($_GET['id']);
+
+        // Create a success message
+        $_SESSION['success'] = 'Patient record updated successfully.';
+
         // Redirect to the patient list page
         header('Location: '. '/patients');
         exit;
@@ -136,6 +204,8 @@ class PatientController extends Controller
      *
      * This method handles the "delete" action for the patient page.
      * It deletes the patient record with the specified ID from the database.
+     *
+     * @return void
      */
     public function delete(): void {
         // Initialize an instance of the Patient model

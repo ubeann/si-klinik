@@ -34,6 +34,8 @@ $router->addRoute('/dashboard', HomeController::class, 'dashboard');
 $router->addRoute('/patients', PatientController::class, 'index');
 $router->addRoute('/patients/form-register', PatientController::class, 'registerForm');
 $router->addRoute('/patients/register', PatientController::class, 'register');
+$router->addRoute('/patients/form-edit', PatientController::class, 'editForm');
+$router->addRoute('/patients/edit', PatientController::class, 'edit');
 $router->addRoute('/patients/delete', PatientController::class, 'delete');
 
 // Get the current URL

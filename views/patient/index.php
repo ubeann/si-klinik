@@ -103,14 +103,14 @@ use function App\Helpers\route;
                         <td>
                             <?php if ($patient['status'] === 'not-filled') : ?>
                                 <a href="<?= route('resume', ['id' => $patient['id']]) ?>" style="color: red; text-decoration: underline">Belum Diisi</a>
-                            <?php elseif ($patient['status'] === 'belum dilengkapi') : ?>
-                                <a href="<?= route('indexresume', ['id' => $patient['id']]) ?>" style="color: yellow; text-decoration: underline">Belum Dilengkapi</a>
+                            <?php elseif ($patient['status'] === 'incomplete') : ?>
+                                <a href="<?= route('indexresume', ['id' => $patient['id']]) ?>" style="color: orange; text-decoration: underline">Belum Dilengkapi</a>
                             <?php else : ?>
                                 <a href="<?= route('indexresume', ['id' => $patient['id']]) ?>" style="color: green; text-decoration: underline">Lengkap</a>
                             <?php endif ?>
                         </td>
                         <td>
-                            <a href="<?= route('edit', ['id' => $patient['id']]) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
+                            <a href="<?= route('patients/form-edit?id=' . $patient['id']) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
                             <a href="<?= route('patients/delete?id=' . $patient['id']) ?>" class="delete-button" onclick="return confirm('Anda yakin ingin menghapus data ini?')"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>

@@ -121,7 +121,11 @@ use function App\Helpers\route;
                 </select>
 
                 <label for="status">Status Rekam Medis</label>
-                <input type="text" id="status" name="status">
+                <select required name="status" id="status">
+                    <option value="not-filled">Belum Diisi</option>
+                    <option value="incomplete">Belum Dilengkapi</option>
+                    <option value="complete">Lengkap</option>
+                </select>
             </div>
             <div class="form-buttons">
                 <a href="<?= route('patients') ?>">
@@ -135,4 +139,8 @@ use function App\Helpers\route;
             </div>
         </div>
     </form>
+
+    <!-- Clear session -->
+    <?php unset($_SESSION['errors']) ?>
+</body>
 </html>
