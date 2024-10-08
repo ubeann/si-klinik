@@ -1,10 +1,8 @@
 <?php
 
 use App\Controllers\AuthController;
-use App\Controllers\CashierController;
 use App\Controllers\HomeController;
 use App\Controllers\PatientController;
-use App\Controllers\TelemedicineController;
 use App\Router;
 
 // Start the session
