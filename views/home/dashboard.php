@@ -23,46 +23,42 @@ use function App\Helpers\route;
             <ul>
                 <li>
                     <a href="<?= route('patients/form-register') ?>">
-                    <!-- <a href="create.php"> -->
                         <img src="<?= asset('assets/home/patients-register.png') ?>" alt="Pendaftaran">
                         Pendaftaran
                     </a>
                 </li>
                 <li>
                     <a href="<?= route('patients') ?>">
-                    <!-- <a href="index.php"> -->
                         <img src="<?= asset('assets/home/patients-search.png') ?>" alt="Pencarian">
                         Data Pasien
                     </a>
                 </li>
                 <li>
-                    <a href="<?= route('patients/queue') ?>">
-                        <img src="<?= asset('assets/home/patients-queue.png') ?>" alt="Antrean">
-                        Antrean
-                    </a>
-                </li>
-                <li>
                     <a href="<?= route('patients/resume') ?>">
-                    <!-- <a href="resume.php"> -->
                         <img src="<?= asset('assets/home/patients-document.png') ?>" alt="Resume Medis">
                         Resume Medis
                     </a>
                 </li>
                 <li>
-                    <a href="<?= route('cashier') ?>">
-                        <img src="<?= asset('assets/home/patients-payment.png') ?>" alt="Kasir">
-                        Kasir
+                    <a href="<?= route('report') ?>">
+                        <img src="<?= asset('assets/home/patients-report.png') ?>" alt="Pelaporan">
+                        Pelaporan
                     </a>
                 </li>
                 <li>
-                    <a href="<?= route('telemedicine') ?>">
-                        <img src="<?= asset('assets/home/patients-telemedicine.png') ?>" alt="Telemdisin">
-                        Telemedicine
+                    <a href="<?= route('disease') ?>">
+                        <img src="<?= asset('assets/home/patients-disease.png') ?>" alt="Index Penyakit">
+                        Index Penyakit
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= route('epidemiologi') ?>">
+                        <img src="<?= asset('assets/home/patients-epidemiologi.png') ?>" alt="Epidemiologi">
+                        Epidemiologi
                     </a>
                 </li>
                 <li>
                     <a href="<?= route('patients/profile') ?>">
-                    <!-- <a href="datapengguna.php"> -->
                         <img src="<?= asset('assets/home/patients-profile.png') ?>" alt="Data Pengguna">
                         Data Pengguna
                     </a>
