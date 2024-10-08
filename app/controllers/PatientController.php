@@ -5,6 +5,13 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use App\Models\Patient;
 
+/**
+ * PatientController
+ *
+ * This controller handles patient-related tasks such as patient registration,
+ * editing, and deletion. It uses the `Patient` model to interact with the patient
+ * data and manages session states for handling error/success messages.
+ */
 class PatientController extends Controller
 {
     /**

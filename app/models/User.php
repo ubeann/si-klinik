@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use PDO;
+
 /**
  * User Model Class
  *
@@ -327,5 +329,106 @@ class User extends Model
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE email = :email";
         $stmt = $this->query($sql, ['email' => $this->email]);
         return (bool) $stmt->fetchColumn();
+    }
+
+    /**
+     * Get all users with optional filtering and pagination
+     *
+     * @param array $filters Optional filters (role, search)
+     * @param int $page Current page number for pagination
+     * @param int $perPage Number of records per page
+     * @return array An array of users
+     */
+    public function getAllUsers(array $filters = [], int $page = 1, int $perPage = 10): array
+    {
+        $conditions = []; // Stores the WHERE conditions for the SQL query
+        $params = []; // Stores the parameter values for the query
+
+        // Filter by status if provided
+        if (!empty($filters['role'])) {
+            $conditions[] = "role = :role";
+            $params[':role'] = $filters['role'];
+        }
+
+        // Filter by search query if provided (matches full name or medical record number)
+        if (!empty($filters['search'])) {
+            $conditions[] = "(name LIKE :name OR email LIKE :email)";
+            $params[':name'] = "%{$filters['search']}%";
+            $params[':email'] = "%{$filters['search']}%";
+        }
+
+        // Build the WHERE clause if conditions are set
+        $whereClause = !empty($conditions) ? 'WHERE ' . implode(' AND ', $conditions) : '';
+
+        // Calculate the offset for pagination
+        $offset = ($page - 1) * $perPage;
+
+        // SQL query to retrieve the users with optional filters and pagination
+        $sql = "SELECT * FROM {$this->table}
+                {$whereClause}
+                ORDER BY name DESC
+                LIMIT :limit OFFSET :offset";
+
+        // Execute the query with the provided parameters
+        $stmt = $this->query($sql, array_merge($params, [
+            ':limit' => $perPage,
+            ':offset' => $offset
+        ]));
+
+        // Fetch and return all user records
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get the pagination links for the user list
+     *
+     * @param array $filters Optional filters (status, search)
+     * @param int $page Current page number for pagination
+     * @param int $perPage Number of records per page
+     * @return array An array of pagination links
+     */
+    public function getPaginationLinks(array $filters = [], int $page = 1, int $perPage = 10): array
+    {
+        $conditions = []; // Stores the WHERE conditions for the SQL query
+        $params = []; // Stores the parameter values for the query
+
+        // Filter by status if provided
+        if (!empty($filters['role'])) {
+            $conditions[] = "role = :role";
+            $params[':role'] = $filters['role'];
+        }
+
+        // Filter by search query if provided (matches full name or medical record number)
+        if (!empty($filters['search'])) {
+            $conditions[] = "(name LIKE :name OR email LIKE :email)";
+            $params[':name'] = "%{$filters['search']}%";
+            $params[':email'] = "%{$filters['search']}%";
+        }
+
+        // Build the WHERE clause if conditions are set
+        $whereClause = !empty($conditions) ? 'WHERE ' . implode(' AND ', $conditions) : '';
+
+        // SQL query to count the total number of patients
+        $sql = "SELECT COUNT(*) FROM {$this->table} {$whereClause}";
+
+        // Execute the query with the provided parameters
+        $stmt = $this->query($sql, $params);
+
+        // Get the total number of patients
+        $totalPatients = $stmt->fetchColumn();
+
+        // Calculate the total number of pages
+        $totalPages = ceil($totalPatients / $perPage);
+
+        // Generate the pagination links
+        $links = [];
+        for ($i = 1; $i <= $totalPages; $i++) {
+            $links[] = [
+                'page' => $i,
+                'url' => "?page={$i}&role={$filters['role']}&search={$filters['search']}"
+            ];
+        }
+
+        return $links;
     }
 }

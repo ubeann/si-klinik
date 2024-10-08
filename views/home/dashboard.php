@@ -58,7 +58,7 @@ use function App\Helpers\route;
                     </a>
                 </li>
                 <li>
-                    <a href="<?= route('patients/profile') ?>">
+                    <a href="<?= route('users') ?>">
                         <img src="<?= asset('assets/home/patients-profile.png') ?>" alt="Data Pengguna">
                         Data Pengguna
                     </a>
