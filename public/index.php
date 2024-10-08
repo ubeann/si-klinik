@@ -36,11 +36,6 @@ $router->addRoute('/dashboard', HomeController::class, 'dashboard');
 $router->addRoute('/patients', PatientController::class, 'index');
 $router->addRoute('/patients/form-register', PatientController::class, 'registerForm');
 $router->addRoute('/patients/register', PatientController::class, 'register');
-$router->addRoute('/patients/queue', PatientController::class, 'queue');
-$router->addRoute('/telemedicine', TelemedicineController::class, 'index');
-$router->addRoute('/telemedicine/form-register', TelemedicineController::class, 'registerForm');
-$router->addRoute('/cashier', CashierController::class, 'index');
-$router->addRoute('/cashier/form-register', CashierController::class, 'registerForm');
 
 // Get the current URL
 $url = $_SERVER['REQUEST_URI'];

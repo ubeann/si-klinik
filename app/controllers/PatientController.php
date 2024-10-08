@@ -130,10 +130,4 @@ class PatientController extends Controller
         header('Location: '. '/patients');
         exit;
     }
-
-    public function queue(): void
-    {
-        // Render the patient queue view (located in the 'views/patient/queue.php' file).
-        $this->view('patient/queue');
-    }
 }
