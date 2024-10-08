@@ -364,6 +364,22 @@ class Patient extends Model
     }
 
     /**
+     * Delete a patient record by ID
+     *
+     * This method deletes the patient record with the specified ID from the database.
+     *
+     * @param int $id The ID of the patient to delete
+     * @return bool True if the patient was deleted successfully, false otherwise
+     */
+    public function delete(int $id): bool
+    {
+        $sql = "DELETE FROM {$this->table} WHERE id = :id";
+        $stmt = $this->query($sql, ['id' => $id]);
+
+        return $stmt->rowCount() > 0;
+    }
+
+    /**
      * Get the age of the patient based on the birth date
      *
      * @return int|null The age of the patient or null if the birth date is not set

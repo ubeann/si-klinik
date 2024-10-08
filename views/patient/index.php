@@ -59,6 +59,19 @@ use function App\Helpers\route;
                 </form>
             </div>
         </div>
+
+        <?php if (isset($_SESSION['errors']['delete'])) : ?>
+            <div class="errors">
+                <span><?= $_SESSION['errors']['delete'] ?></span>
+            </div>
+        <?php endif ?>
+
+        <?php if (isset($_SESSION['success'])) : ?>
+            <div class="success">
+                <span><?= $_SESSION['success'] ?></span>
+            </div>
+        <?php endif ?>
+
         <table>
             <thead>
                 <tr>
@@ -98,7 +111,7 @@ use function App\Helpers\route;
                         </td>
                         <td>
                             <a href="<?= route('edit', ['id' => $patient['id']]) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
-                            <a href="<?= route('delete', ['id' => $patient['id']]) ?>" class="delete-button" onclick="return confirm('Anda yakin ingin menghapus data ini?')"><i class="fas fa-trash-alt"></i></a>
+                            <a href="<?= route('patients/delete?id=' . $patient['id']) ?>" class="delete-button" onclick="return confirm('Anda yakin ingin menghapus data ini?')"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -115,6 +128,9 @@ use function App\Helpers\route;
             <?php endforeach; ?>
         </div>
     </div>
+
+    <!-- Clear session -->
+    <?php unset($_SESSION['errors'], $_SESSION['success']) ?>
 </body>
 
 </html>

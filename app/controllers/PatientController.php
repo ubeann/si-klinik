@@ -130,4 +130,28 @@ class PatientController extends Controller
         header('Location: '. '/patients');
         exit;
     }
+
+    /**
+     * Delete a patient record.
+     *
+     * This method handles the "delete" action for the patient page.
+     * It deletes the patient record with the specified ID from the database.
+     */
+    public function delete(): void {
+        // Initialize an instance of the Patient model
+        $patient = new Patient();
+
+        // Delete the patient record
+        $success = $patient->delete($_GET['id']);
+
+        // Create a success message
+        if ($success) {
+            $_SESSION['success'] = 'Patient record deleted successfully.';
+        } else {
+            $_SESSION['errors']['delete'] = 'Failed to delete patient record.';
+        }
+
+        // Redirect to the patient list page
+        header('Location: '. '/patients');
+    }
 }
