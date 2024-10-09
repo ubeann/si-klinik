@@ -54,6 +54,11 @@ $router->addRoute('/disease', DiseaseController::class, 'index');
 
 // Epidemiologi routes
 $router->addRoute('/epidemiologi', EpidemiologiController::class, 'index');
+$router->addRoute('/epidemiologi/form-register', EpidemiologiController::class, 'registerForm');
+$router->addRoute('/epidemiologi/register', EpidemiologiController::class, 'register');
+$router->addRoute('/epidemiologi/form-edit', EpidemiologiController::class, 'editForm');
+$router->addRoute('/epidemiologi/edit', EpidemiologiController::class, 'edit');
+$router->addRoute('/epidemiologi/delete', EpidemiologiController::class, 'delete');
 
 // Users routes
 $router->addRoute('/users', UserController::class, 'index');
