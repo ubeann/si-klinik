@@ -5,6 +5,13 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use App\Models\User;
 
+/**
+ * UserController
+ *
+ * This controller handles user-related tasks such as user registration,
+ * editing, and deletion. It uses the `User` model to interact with the user
+ * data and manages session states for handling error/success messages.
+ */
 class UserController extends Controller
 {
     /**
