@@ -45,6 +45,9 @@ $router->addRoute('/patients/delete', PatientController::class, 'delete');
 $router->addRoute('/users', UserController::class, 'index');
 $router->addRoute('/users/form-register', UserController::class, 'registerForm');
 $router->addRoute('/users/register', UserController::class, 'register');
+$router->addRoute('/users/form-edit', UserController::class, 'editForm');
+$router->addRoute('/users/edit', UserController::class, 'edit');
+$router->addRoute('/users/change-password', UserController::class, 'changePassword');
 $router->addRoute('/users/delete', UserController::class, 'delete');
 
 // Get the current URL

@@ -79,6 +79,23 @@ class User extends Model
     }
 
     /**
+     * Safely sets user info with proper sanitization.
+     * This method ensures all incoming data is properly sanitized
+     * before being assigned to object info.
+     *
+     * @param array<string, mixed> $data User data to be set
+     */
+    public function setInfo(array $data): void
+    {
+        // Using null coalescing operator for cleaner default value handling
+        $this->name = $this->sanitizeString($data['name'] ?? $this->name);
+        $this->email = $this->sanitizeEmail($data['email'] ?? $this->email);
+        $this->phoneNumber = $this->sanitizeString($data['phone_number'] ?? $this->phoneNumber);
+        $this->address = $this->sanitizeString($data['address'] ?? $this->address);
+        $this->role = $this->sanitizeString($data['role'] ?? $this->role);
+    }
+
+    /**
      * Sanitize a string input
      *
      * @param string $input Input string to sanitize
@@ -107,7 +124,7 @@ class User extends Model
      *
      * @param string $password Plain text password
      */
-    private function setPassword(string $password): void
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }
@@ -116,7 +133,7 @@ class User extends Model
      * Hashes the password using secure bcrypt algorithm.
      * Only hashes if password is not empty and not already hashed.
      */
-    private function hashPassword(): void
+    public function hashPassword(): void
     {
         if (empty($this->password) || $this->isPasswordHashed()) {
             return;
@@ -186,13 +203,19 @@ class User extends Model
      *
      * @return bool True if update was successful
      */
-    private function updatePassword(): bool
+    public function updatePassword(): bool
     {
+        // Ensure password is hashed before saving
+        $this->hashPassword();
+
+        // SQL query to update the user's password
         $sql = "UPDATE {$this->table} SET password = :password WHERE email = :email";
         $stmt = $this->query($sql, [
             'password' => $this->password,
             'email' => $this->email
         ]);
+
+        // Return true if the query was successful
         return $stmt->rowCount() > 0;
     }
 
@@ -485,6 +508,50 @@ class User extends Model
 
         return false;
     }
+
+    /**
+     * Update a user record.
+     *
+     * This method handles the "edit" action for the user edit form.
+     * It processes the form submission, validates the input data, and updates
+     * the user record with the specified ID in the database.
+     *
+     * @param int $id The ID of the patient to update
+     * @return bool True if the update was successful, false otherwise
+     */
+    public function update(int $id): bool
+    {
+        // Validate the user data
+        $errors = $this->validate();
+        if (!empty($errors)) {
+            throw new InvalidArgumentException(json_encode($errors));
+        }
+
+        // Update the user record in the database
+        $sql = "UPDATE {$this->table} SET name = :name, email = :email, phone_number = :phone_number, address = :address, role = :role WHERE id = :id";
+        $stmt = $this->query($sql, [
+            'name' => $this->name,
+            'email' => $this->email,
+            'phone_number' => $this->phoneNumber,
+            'address' => $this->address,
+            'role' => $this->role,
+            'id' => $id
+        ]);
+
+        // Return true if the update was successful
+        return $stmt->rowCount() > 0;
+    }
+
+    /**
+     * Change password for a user record.
+     *
+     * This method handles the "change-password" action for the user edit form.
+     * It processes the form submission, validates the input data, and updates
+     * the user's password in the database.
+     *
+     * @param int $id The ID of the patient to update
+     * @return bool True if the update was successful, false otherwise
+     */
 
     /**
      * Delete a user record by ID

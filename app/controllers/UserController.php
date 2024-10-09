@@ -129,6 +129,129 @@ class UserController extends Controller
     }
 
     /**
+     * Display the user edit form.
+     *
+     * This method handles the "edit" action for the user page.
+     * It retrieves the user record with the specified ID from the database
+     * and displays the user edit form.
+     *
+     * @return void
+     */
+    public function editForm(): void {
+        // Initialize an instance of the User model
+        $user = new User();
+
+        // Get the user record with the specified ID
+        $user->load($_GET['id']);
+
+        // Render the user edit form view (located in the 'views/user/edit.php' file).
+        $this->view('user/edit', ['user' => $user, 'id' => $_GET['id']]);
+    }
+
+    /**
+     * Update a user record.
+     *
+     * This method handles the "edit" action for the user edit form.
+     * It processes the form submission, validates the input data, and updates
+     * the user record with the specified ID in the database.
+     *
+     * @return void
+     */
+    public function edit(): void {
+        // Redirect to the form registration page when the method is not POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: '. '/users/form-edit?id=' . $_GET['id']);
+            exit;
+        }
+
+        // Initialize an instance of the User model
+        $user = new User();
+
+        // Load the user record to be updated
+        $user->load($_GET['id']);
+
+        // Set the updated user record properties
+        $user->setInfo($_POST);
+
+        // Validate the updated user record
+        $errors = $user->validate();
+
+        // If validation fails, save errors to the session and redirect to the user edit form
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            header('Location: '. '/users/form-edit?id=' . $_GET['id']);
+            exit;
+        }
+
+        // Update the user record in the database
+        $user->update($_GET['id']);
+
+        // Save a success message to the session
+        $_SESSION['success'] = 'User updated successfully.';
+
+        // Redirect to the user list page
+        header('Location: '. '/users');
+    }
+
+    /**
+     * Change the user password.
+     *
+     * This method handles the "change-password" action for the user page.
+     * It processes the form submission, validates the input data, and updates
+     * the user's password in the database.
+     *
+     * @return void
+     */
+    public function changePassword(): void {
+        // Redirect to the form registration page when the method is not POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: '. '/users/form-edit?id=' . $_GET['id']);
+            exit;
+        }
+
+        // Check `password` and `password_confirmation` fields are not empty and match
+        if (empty($_POST['password']) || empty($_POST['password_confirmation']) || $_POST['password'] !== $_POST['password_confirmation']) {
+            // Create an error message for password mismatch
+            $_SESSION['errors']['password'] = 'Password and confirmation do not match.';
+
+            // Redirect to the user edit form
+            header('Location: '. '/users/form-edit?id=' . $_GET['id']);
+            exit;
+        }
+
+        // Initialize an instance of the User model
+        $user = new User();
+
+        // Load the user record to be updated
+        $user->load($_GET['id']);
+
+        // Set the updated user password
+        $user->setPassword($_POST['password']);
+
+        // Hash the updated password
+        $user->hashPassword();
+
+        // Validate the updated user password
+        $errors = $user->validate();
+
+        // If validation fails, save errors to the session and redirect to the user edit form
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            header('Location: '. '/users/form-edit?id=' . $_GET['id']);
+            exit;
+        }
+
+        // Update the user password in the database
+        $user->updatePassword();
+
+        // Save a success message to the session
+        $_SESSION['success'] = 'Password updated successfully.';
+
+        // Redirect to the user list page
+        header('Location: '. '/users');
+    }
+
+    /**
      * Delete a user record.
      *
      * This method handles the "delete" action for the user page.
