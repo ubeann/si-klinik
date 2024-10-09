@@ -20,9 +20,9 @@ use function App\Helpers\route;
     <header>
         <nav>
             <ul>
-                <li><img src="<?= asset('assets/logo-si-klin.png') ?>"></li>
+                <li><img src="<?= asset('assets/logo.png') ?>"></li>
                 <li style="font-size:xx-large; margin-top: 25px">SISTEM INFORMASI KLINIK</li>
-                <li><img src="<?= asset('assets/logo-desplsteks.png') ?>"></li>
+                <li><img src="<?= asset('assets/logo.png') ?>" style="opacity: 0;"></li>
             </ul>
         </nav>
     </header>

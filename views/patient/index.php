@@ -19,7 +19,7 @@ use function App\Helpers\route;
         <nav>
             <ul>
                 <li>
-                    <img src="<?= asset('assets/logo-si-klin.png') ?>" alt="Klinik Logo">
+                    <img src="<?= asset('assets/logo.png') ?>" alt="Klinik Logo">
                 </li>
                 <li>
                     <a href="<?= route('dashboard') ?>">

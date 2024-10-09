@@ -18,7 +18,7 @@ use function App\Helpers\route;
     <div id="container">
         <div id="sidebar">
             <div class="logo">
-                <img src="<?= asset('assets/logo-si-klin.png') ?>" alt="Klinik Logo">
+                <img src="<?= asset('assets/logo.png') ?>" alt="Klinik Logo">
             </div>
             <ul>
                 <li>

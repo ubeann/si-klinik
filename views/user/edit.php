@@ -18,7 +18,7 @@ use function App\Helpers\route;
     <header>
         <div class="header">
             <div class="logo">
-                <img src="<?= asset('assets/logo-si-klin.png') ?>" alt="Klinik Logo">
+                <img src="<?= asset('assets/logo.png') ?>" alt="Klinik Logo">
                 <div class="logo-text"></div>
             </div>
             <a href="<?= route('dashboard') ?>">
