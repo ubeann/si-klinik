@@ -9,7 +9,7 @@ use function App\Helpers\route;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Sistem Informasi Klinik</title>
+    <title>Dashboard Sistem Darurat Bencana</title>
     <link rel="stylesheet" href="<?= asset('css/home/dashboard.css') ?>">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
@@ -76,7 +76,7 @@ use function App\Helpers\route;
                     </form>
                 </div>
             </div>
-            <h1>DASHBOARD SISTEM INFORMASI KLINIK</h1><br>
+            <h1>DASHBOARD SISTEM DARURAT BENCANA</h1><br>
             <div class="container">
             </div>
             <div id="chart-container">

@@ -11,7 +11,7 @@ use function App\Helpers\route;
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Informasi Klinik</title>
+    <title>Sistem Darurat Bencana</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="<?= asset('css/home/index.css') ?>">
 </head>
@@ -21,7 +21,7 @@ use function App\Helpers\route;
         <nav>
             <ul>
                 <li><img src="<?= asset('assets/logo.png') ?>"></li>
-                <li style="font-size:xx-large; margin-top: 25px">SISTEM INFORMASI KLINIK</li>
+                <li style="font-size:xx-large; margin-top: 25px">SISTEM DARURAT BENCANA</li>
                 <li><img src="<?= asset('assets/logo.png') ?>" style="opacity: 0;"></li>
             </ul>
         </nav>
@@ -74,13 +74,13 @@ use function App\Helpers\route;
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
-                    <h1>Daftar atau Buat akun SiKLIN!</h1>
+                    <h1>Daftar Akun!</h1>
                     <p>isi sesuai dengan data personal anda</p>
                     <button class="ghost" id="signIn">Punya Akun?</button>
                 </div>
                 <div class="overlay-panel overlay-right">
-                    <h1>Selamat Datang di SIKLIN!</h1>
-                    <p style="text-align: left; margin-left: 20px;">Sistem Informasi Klinik sederhana
+                    <h1>Selamat Datang!</h1>
+                    <p style="text-align: left; margin-left: 20px;">Sistem Darurat Bencana sederhana
                         dikembangkan oleh mahasiswa 3A
                         Rekam Medis dan Informasi Kesehatan
                         Poltekkes Kemenkes Tasikmalaya</p>
