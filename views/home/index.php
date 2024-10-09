@@ -74,12 +74,12 @@ use function App\Helpers\route;
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
-                    <h1>Daftar Akun!</h1>
+                    <h1>Daftar atau Buat Akun MEDRESCUE!</h1>
                     <p>isi sesuai dengan data personal anda</p>
                     <button class="ghost" id="signIn">Punya Akun?</button>
                 </div>
                 <div class="overlay-panel overlay-right">
-                    <h1>Selamat Datang!</h1>
+                    <h1>Selamat Datang di MEDRESCUE!</h1>
                     <p style="text-align: left; margin-left: 20px;">Sistem Darurat Bencana sederhana
                         dikembangkan oleh mahasiswa 3A
                         Rekam Medis dan Informasi Kesehatan
