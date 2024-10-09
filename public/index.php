@@ -1,6 +1,8 @@
 <?php
 
 use App\Controllers\AuthController;
+use App\Controllers\DiseaseController;
+use App\Controllers\EpidemiologiController;
 use App\Controllers\HomeController;
 use App\Controllers\PatientController;
 use App\Controllers\ResumeController;
@@ -46,6 +48,12 @@ $router->addRoute('/patients/delete', PatientController::class, 'delete');
 $router->addRoute('/resume', ResumeController::class, 'index');
 $router->addRoute('/resume/form', ResumeController::class, 'form');
 $router->addRoute('/resume/save', ResumeController::class, 'save');
+
+// Disease routes
+$router->addRoute('/disease', DiseaseController::class, 'index');
+
+// Epidemiologi routes
+$router->addRoute('/epidemiologi', EpidemiologiController::class, 'index');
 
 // Users routes
 $router->addRoute('/users', UserController::class, 'index');

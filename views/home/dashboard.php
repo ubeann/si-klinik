@@ -35,14 +35,8 @@ use function App\Helpers\route;
                 </li>
                 <li>
                     <a href="<?= route('resume') ?>">
-                        <img src="<?= asset('assets/home/patients-document.png') ?>" alt="Resume Medis">
+                        <img src="<?= asset('assets/home/patients-report.png') ?>" alt="Resume Medis">
                         Resume Medis
-                    </a>
-                </li>
-                <li>
-                    <a href="<?= route('report') ?>">
-                        <img src="<?= asset('assets/home/patients-report.png') ?>" alt="Pelaporan">
-                        Pelaporan
                     </a>
                 </li>
                 <li>
