@@ -1,5 +1,4 @@
 <?php
-
 use function App\Helpers\asset;
 use function App\Helpers\route;
 ?>

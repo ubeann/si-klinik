@@ -68,4 +68,36 @@ class ResumeController extends Controller
         // Render the resume list view (located in the 'views/resume/index.php' file).
         $this->view('resume/index', ['patients' => $patients, 'pagination' => $pagination]);
     }
+
+    /**
+     * Display the form to submit a new resume for a patient.
+     *
+     * This method handles the "form" action for the resume page.
+     * It calls the `view` method (inherited from the base Controller class) to load
+     * the corresponding view file (`resume/form.php`). Additional data can
+     * be passed to the view if needed.
+     *
+     * @return void
+     */
+    public function form(): void
+    {
+        // Check if the patient ID is provided in the query string
+        if (!isset($_GET['id'])) {
+            // Create an error message for missing patient ID
+            $_SESSION['errors']['id'] = 'Patient ID is required to submit a resume.';
+
+            // Redirect to the resume list page
+            header('Location: '. '/resume');
+            exit;
+        }
+
+        // Initialize an instance of the Patient model
+        $patient = new Patient();
+
+        // Get the patient record with the specified ID
+        $patient->load($_GET['id']);
+
+        // Render the resume form view (located in the 'views/resume/form.php' file).
+        $this->view('resume/form', ['patient' => $patient]);
+    }
 }

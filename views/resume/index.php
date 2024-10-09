@@ -34,9 +34,7 @@ use function App\Helpers\route;
     </header>
     <div class="container">
         <div class="header">
-            <a href="<?= route('resume/form-register') ?>">
-                <button>Buka Form</button>
-            </a>
+            <div></div>
             <div>
                 <form action="<?= route('resume') ?>" method="get">
                     <label for="status">Filter:</label>
@@ -108,8 +106,7 @@ use function App\Helpers\route;
                             <?php endif ?>
                         </td>
                         <td>
-                            <a href="<?= route('patients/form-edit?id=' . $patient['id']) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
-                            <a href="<?= route('patients/delete?id=' . $patient['id']) ?>" class="delete-button" onclick="return confirm('Anda yakin ingin menghapus data ini?')"><i class="fas fa-trash-alt"></i></a>
+                            <a href="<?= route('resume/form?id=' . $patient['id']) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
