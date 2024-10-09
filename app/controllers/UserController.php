@@ -27,11 +27,11 @@ class UserController extends Controller
     }
 
     /**
-     * Display the list of patients.
+     * Display the list of users.
      *
-     * This method handles the "index" action for the patient page.
+     * This method handles the "index" action for the user page.
      * It calls the `view` method (inherited from the base Controller class) to load
-     * the corresponding view file (`patient/index.php`). Additional data can
+     * the corresponding view file (`user/index.php`). Additional data can
      * be passed to the view if needed.
      *
      * @return void
@@ -65,10 +65,66 @@ class UserController extends Controller
             page: $page
         );
 
-        // Render the patient list view (located in the 'views/patient/index.php' file).
+        // Render the user list view (located in the 'views/user/index.php' file).
         $this->view('user/index', [
             'users' => $users,
             'pagination' => $pagination
         ]);
+    }
+
+    /**
+     * Display the user registration form.
+     *
+     * This method handles the "register" action for the user registration page.
+     * It calls the `view` method (inherited from the base Controller class) to load
+     * the corresponding view file (`user/register.php`). Additional data can
+     * be passed to the view if needed.
+     *
+     * @return void
+     */
+    public function registerForm(): void
+    {
+        // Render the user registration form view (located in the 'views/user/register.php' file).
+        $this->view('user/register');
+    }
+
+    /**
+     * Register a new user.
+     *
+     * This method handles the "register" action for the user registration form.
+     * It processes the form submission, validates the input data, and saves the
+     * new user record to the database.
+     *
+     * @return void
+     */
+    public function register(): void
+    {
+        // Redirect to the form registration page when the method is not POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: '. '/users/form-register');
+            exit;
+        }
+
+        // Create a new User model instance with the form data
+        $user = new User(data: $_POST);
+
+        // Validate the registration form data
+        $errors = $user->validate();
+
+        // If validation fails, save errors to the session and redirect to home
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            header('Location: '. '/users/form-register');
+            exit;
+        }
+
+        // If data is valid, create the new user
+        $user->create();
+
+        // Save a success message to the session
+        $_SESSION['success'] = 'User created successfully!';
+
+        // Redirect to the home page
+        header('Location: '. '/users');
     }
 }

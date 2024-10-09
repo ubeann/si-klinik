@@ -22,6 +22,12 @@ class User extends Model
     /** @var string User's email address */
     private string $email = '';
 
+    /** @var string User's phone number */
+    private string $phoneNumber = '';
+
+    /** @var string User's address */
+    private string $address = '';
+
     /** @var string User's password (hashed when stored) */
     private string $password = '';
 
@@ -66,6 +72,8 @@ class User extends Model
         // Using null coalescing operator for cleaner default value handling
         $this->name = $this->sanitizeString($data['name'] ?? '');
         $this->email = $this->sanitizeEmail($data['email'] ?? '');
+        $this->phoneNumber = $this->sanitizeString($data['phone_number'] ?? '');
+        $this->address = $this->sanitizeString($data['address'] ?? '');
         $this->setPassword($data['password'] ?? '');
         $this->role = $this->sanitizeString($data['role'] ?? '');
     }
@@ -250,6 +258,26 @@ class User extends Model
     }
 
     /**
+     * Get the user's phone number.
+     *
+     * @return string User's phone number
+     */
+    public function getPhoneNumber(): string
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * Get the user's address.
+     *
+     * @return string User's address
+     */
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    /**
      * Get the user's role.
      *
      * @return string User's role
@@ -281,18 +309,24 @@ class User extends Model
         // Ensure password is hashed before saving
         $this->hashPassword();
 
-        $sql = "INSERT INTO {$this->table} (name, email, password, role)
-                VALUES (:name, :email, :password, :role)";
+        // SQL query to insert user data
+        $sql = "INSERT INTO {$this->table} (name, email, password, role, phone_number, address)
+                VALUES (:name, :email, :password, :role, :phone_number, :address)";
 
+        // Parameters for the query
         $params = [
             'name' => $this->name,
             'email' => $this->email,
             'password' => $this->password,
-            'role' => $this->role
+            'role' => $this->role,
+            'phone_number' => empty($this->phoneNumber) ? null : $this->phoneNumber,
+            'address' => empty($this->address) ? null : $this->address
         ];
 
+        // Execute the query and return the new user ID
         $stmt = $this->query($sql, $params);
 
+        // Return the new user ID if the query was successful
         return $stmt->rowCount() > 0
             ? (int) $this->db->lastInsertId()
             : false;
@@ -400,9 +434,10 @@ class User extends Model
 
         // Filter by search query if provided (matches full name or medical record number)
         if (!empty($filters['search'])) {
-            $conditions[] = "(name LIKE :name OR email LIKE :email)";
+            $conditions[] = "(name LIKE :name OR email LIKE :email or phone_number LIKE :phone_number)";
             $params[':name'] = "%{$filters['search']}%";
             $params[':email'] = "%{$filters['search']}%";
+            $params[':phone_number'] = "%{$filters['search']}%";
         }
 
         // Build the WHERE clause if conditions are set

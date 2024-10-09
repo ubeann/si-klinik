@@ -10,7 +10,7 @@ use function App\Helpers\route;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Pasien</title>
-    <link rel="stylesheet" href="<?= asset('css/patient/index.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/user/index.css') ?>">
     <script src="https://kit.fontawesome.com/c2dc05efdd.js" crossorigin="anonymous"></script>
 </head>
 
@@ -34,7 +34,7 @@ use function App\Helpers\route;
     </header>
     <div class="container">
         <div class="header">
-            <a href="<?= route('patients/form-register') ?>">
+            <a href="<?= route('users/form-register') ?>">
                 <button>Buka Form</button>
             </a>
             <div>
@@ -68,7 +68,9 @@ use function App\Helpers\route;
             <thead>
                 <tr>
                     <th>Nama</th>
+                    <th>Nomor HP</th>
                     <th>Email</th>
+                    <th>Alamat</th>
                     <th>Jabatan</th>
                     <th>Aksi</th>
                 </tr>
@@ -77,7 +79,9 @@ use function App\Helpers\route;
                 <?php foreach ($users as $user) : ?>
                     <tr>
                         <td><?= $user['name'] ?></td>
+                        <td><?= $user['phone_number'] ?? '-' ?></td>
                         <td><?= $user['email'] ?></td>
+                        <td><?= $user['address'] ?? '-' ?></td>
                         <td><?= strtoupper($user['role']) ?></td>
                         <td>
                             <a href="<?= route('patients/form-edit?id=' . $patient['id']) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
