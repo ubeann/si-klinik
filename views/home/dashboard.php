@@ -34,7 +34,7 @@ use function App\Helpers\route;
                     </a>
                 </li>
                 <li>
-                    <a href="<?= route('patients/resume') ?>">
+                    <a href="<?= route('resume') ?>">
                         <img src="<?= asset('assets/home/patients-document.png') ?>" alt="Resume Medis">
                         Resume Medis
                     </a>

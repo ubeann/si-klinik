@@ -3,6 +3,7 @@
 use App\Controllers\AuthController;
 use App\Controllers\HomeController;
 use App\Controllers\PatientController;
+use App\Controllers\ResumeController;
 use App\Controllers\UserController;
 use App\Router;
 
@@ -40,6 +41,9 @@ $router->addRoute('/patients/register', PatientController::class, 'register');
 $router->addRoute('/patients/form-edit', PatientController::class, 'editForm');
 $router->addRoute('/patients/edit', PatientController::class, 'edit');
 $router->addRoute('/patients/delete', PatientController::class, 'delete');
+
+// Resume routes
+$router->addRoute('/resume', ResumeController::class, 'index');
 
 // Users routes
 $router->addRoute('/users', UserController::class, 'index');

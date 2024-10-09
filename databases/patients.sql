@@ -1,4 +1,5 @@
 CREATE TABLE patients (
+    -- Information about the patient
     id INT AUTO_INCREMENT PRIMARY KEY,
     medical_record_number VARCHAR(8) NOT NULL,
     registration_date DATE NOT NULL,
@@ -13,5 +14,17 @@ CREATE TABLE patients (
     occupation VARCHAR(100),
     education VARCHAR(100),
     marital_status VARCHAR(50),
+
+    -- Information about the patient's resumes
+    initial_diagnosis TEXT,
+    initial_icd_code VARCHAR(10),
+    primary_diagnosis TEXT,
+    primary_icd_code VARCHAR(10),
+    anamnesis TEXT,
+    physical_examination TEXT,
+    prescribed_medication TEXT,
+    treatment_or_follow_up TEXT,
+
+    -- Additional information
     status VARCHAR(50)
 );

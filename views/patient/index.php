@@ -117,7 +117,7 @@ use function App\Helpers\route;
                 <?php endforeach; ?>
                 <?php if (empty($patients)) : ?>
                     <tr>
-                        <td colspan="8">No records found</td>
+                        <td colspan="11">No records found, please create a new patient first or change the filter</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

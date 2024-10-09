@@ -1,188 +1,134 @@
 <?php
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "pendaftaran";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nomerRM = $_POST['nomerRM'];
-    $nama = $_POST['nama'];
-    $tglLahir = $_POST['tglLahir'];
-    $umur = $_POST['umur'];
-    $jeniskelamin = $_POST['jeniskelamin'];
-    $tglDaftar = $_POST['tglDaftar'];
-    $diagnosaawal = $_POST['diagnosaawal'];
-    $kodeawal = $_POST['kodeawal'];
-    $diagnosautama = $_POST['diagnosautama'];
-    $kodeutama = $_POST['kodeutama'];
-    $anamnesis = $_POST['anamnesis'];
-    $pemeriksaanfisik = $_POST['pemeriksaanfisik'];
-    $obat = $_POST['obat'];
-    $tindakan = $_POST['tindakan'];
-    $statusrm = $_POST['statusrm'];
-
-    $sql = "UPDATE pendaftaran SET
-            nomerRM = '$nomerRM',
-            nama = '$nama',
-            tglLahir = '$tglLahir',
-            umur = '$umur',
-            jeniskelamin = '$jeniskelamin',
-            tglDaftar = '$tglDaftar',
-            diagnosaawal = '$diagnosaawal',
-            kodeawal = '$kodeawal',
-            diagnosautama = '$diagnosautama',
-            kodeutama = '$kodeutama',
-            anamnesis = '$anamnesis',
-            pemeriksaanfisik = '$pemeriksaanfisik',
-            obat = '$obat'
-            tindakan = '$tindakan'
-            statusrm = '$statusrm'
-            WHERE id = $id";
-
-    if ($conn->query($sql) === TRUE) {
-        header("Location: index.php");
-        exit();
-    } else {
-        echo "Error updating record: " . $conn->error;
-    }
-}
-
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $sql = "SELECT * FROM pendaftaran WHERE id = $id";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-    } else {
-        echo "No record found";
-        exit();
-    }
-} else {
-    echo "No ID provided";
-    exit();
-}
-
-$conn->close();
+use function App\Helpers\asset;
+use function App\Helpers\route;
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <script src="https://kit.fontawesome.com/c2dc05efdd.js" crossorigin="anonymous"></script><meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pendaftaran Pasien</title>
-    <link rel="stylesheet" href="css/indexresume.css">
+    <title>Data Pasien</title>
+    <link rel="stylesheet" href="<?= asset('css/resume/index.css') ?>">
+    <script src="https://kit.fontawesome.com/c2dc05efdd.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <div class="header">
-        <div class="logo">
-            <img src="property/siklin.png" alt="Logo">
-            <div class="logo-text"></div>
+    <header>
+        <nav>
+            <ul>
+                <li>
+                    <img src="<?= asset('assets/logo.png') ?>" alt="Klinik Logo">
+                </li>
+                <li>
+                    <a href="<?= route('dashboard') ?>">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="70" viewBox="0 0 30 20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="header">
+            <a href="<?= route('resume/form-register') ?>">
+                <button>Buka Form</button>
+            </a>
+            <div>
+                <form action="<?= route('resume') ?>" method="get">
+                    <label for="status">Filter:</label>
+                    <select name="status" id="status">
+                        <option value="all" <?= ($_GET['status'] ?? null) === 'all' ? 'selected' : '' ?>>
+                            Semua
+                        </option>
+                        <option value="not-filled" <?= ($_GET['status'] ?? null) === 'not-filled' ? 'selected' : '' ?>>
+                            Belum Diisi
+                        </option>
+                        <option value="incomplete" <?= ($_GET['status'] ?? null) === 'incomplete' ? 'selected' : '' ?>>
+                            Belum Dilengkapi
+                        </option>
+                        <option value="complete" <?= ($_GET['status'] ?? null) === 'complete' ? 'selected' : '' ?>>
+                            Lengkap
+                        </option>
+                    </select>
+                    <input type="text" placeholder="Pencarian..." name="search" value="<?= $_GET['search'] ?? '' ?>">
+                    <button type="submit">Cari</button>
+                </form>
+            </div>
         </div>
-            <a href="index.php"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="70" viewBox="0 0 30 20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></a></li>
+
+        <?php if (isset($_SESSION['errors']['delete'])) : ?>
+            <div class="errors">
+                <span><?= $_SESSION['errors']['delete'] ?></span>
+            </div>
+        <?php endif ?>
+
+        <?php if (isset($_SESSION['success'])) : ?>
+            <div class="success">
+                <span><?= $_SESSION['success'] ?></span>
+            </div>
+        <?php endif ?>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>No. RM</th>
+                    <th>Nama Pasien</th>
+                    <th>Diagnosa Awal (ICD-10)</th>
+                    <th>Diagnosa Utama (ICD-10)</th>
+                    <th>Anamnesis</th>
+                    <th>Pemeriksaan Fisik</th>
+                    <th>Resep Obat</th>
+                    <th>Tindak Lanjut</th>
+                    <th>Status RM</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($patients as $patient) : ?>
+                    <tr>
+                        <td><?= $patient['medical_record_number'] ?></td>
+                        <td><?= $patient['full_name'] ?></td>
+                        <td><?= $patient['initial_diagnosis'] ?? '-' ?> <?= $patient['initial_diagnosis'] ? '(ICD-10: ' . ($patient['initial_icd_code'] ?? '-') . ')' : '' ?></td>
+                        <td><?= $patient['primary_diagnosis'] ?? '-' ?> <?= $patient['primary_diagnosis'] ? '(ICD-10: ' . ($patient['primary_icd_code'] ?? '-') . ')' : '' ?></td>
+                        <td><?= $patient['anamnesis'] ?? '-' ?></td>
+                        <td><?= $patient['physical_examination'] ?? '-' ?></td>
+                        <td><?= $patient['prescribed_medication'] ?? '-' ?></td>
+                        <td><?= $patient['treatment_or_follow_up'] ?? '-' ?></td>
+                        <td>
+                            <?php if ($patient['status'] === 'not-filled') : ?>
+                                <a href="<?= route('resume', ['id' => $patient['id']]) ?>" style="color: red; text-decoration: underline">Belum Diisi</a>
+                            <?php elseif ($patient['status'] === 'incomplete') : ?>
+                                <a href="<?= route('indexresume', ['id' => $patient['id']]) ?>" style="color: orange; text-decoration: underline">Belum Dilengkapi</a>
+                            <?php else : ?>
+                                <a href="<?= route('indexresume', ['id' => $patient['id']]) ?>" style="color: green; text-decoration: underline">Lengkap</a>
+                            <?php endif ?>
+                        </td>
+                        <td>
+                            <a href="<?= route('patients/form-edit?id=' . $patient['id']) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
+                            <a href="<?= route('patients/delete?id=' . $patient['id']) ?>" class="delete-button" onclick="return confirm('Anda yakin ingin menghapus data ini?')"><i class="fas fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php if (empty($patients)) : ?>
+                    <tr>
+                        <td colspan="10">No patients found, please create a new patient first</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+        <div class="pagination">
+            <?php foreach ($pagination as $link) : ?>
+                <a href="<?= $link['url'] ?>"><?= $link['page'] ?></a>
+            <?php endforeach; ?>
         </div>
     </div>
+
+    <!-- Clear session -->
+    <?php unset($_SESSION['errors'], $_SESSION['success']) ?>
 </body>
-</html>
-<body>
-    <h1>Form Edit data pasien</h1>
-    <form method="POST" action="edit.php">
-    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-        <div class="container">
-        <div class="form-group">
-            <label for="nomerRM">Nomer RM</label>
-            <input type="text" id="nomerRM" name="nomerRM" value="<?php echo $row['nomerRM']; ?>">
-        </div>
-        <div class="form-group">
-            <label for="nama">Nama</label>
-            <input type="text" id="nama" name="nama" class="long" value="<?php echo $row['nama']; ?>">
-        </div>
-        <div class="form-group">
-    <label for="tglLahir">Tgl. Lahir</label>
-    <input type="date" id="tglLahir" name="tglLahir" value="<?php echo $row['tglLahir']; ?>">
 
-    <label for="umur">Umur</label>
-    <?php
-    $birthday = $row['tglLahir'];
-    $age = calculateAge($birthday);
-    ?>
-    <input type="int" id="umur" name="umur" value="<?php echo $age; ?>">
-</div>
-
-<?php
-function calculateAge($birthday) {
-    $today = date("Y-m-d");
-    $age = date_diff(date_create($birthday), date_create($today));
-    return $age->y;
-}
-?>
-
-        <div class="form-group">
-        <label for="jeniskelamin">Jenis Kelamin</label>
-            <span class="required">*</span>
-            <input type="radio" id="jeniskelaminL" name="jeniskelamin" value="L">
-            <label for="jeniskelamin">L</label>
-            <input type="radio" id="jeniskelaminP" name="jeniskelamin" value="P">
-            <label for="jeniskelamin">P</label>
-
-            <label for="tglDaftar">Tgl. Daftar</label>
-            <input type="date" id="tglDaftar" name="tglDaftar" value="<?php echo $row['tglDaftar']; ?>">
-        </div>
-
-        <div class="form-group">
-            <label for="diagnosaawal">Diagnosa Awal</label>
-            <input type="text" id="diagnosaawal" name="diagnosaawal" value="<?php echo $row['diagnosaawal']; ?>">
-
-            <label for="kodeawal">ICD 10</label>
-            <input type="varchar" id="kodeawal" name="kodeawal" value="<?php echo $row['kodeawal']; ?>">
-        </div>
-
-        <div class="form-group">
-        <label for="diagnosautama">Diagnosa Utama</label>
-            <input type="text" id="diagnosautama" name="diagnosautama" value="<?php echo $row['diagnosautama']; ?>">
-
-            <label for="kodeutama">ICD 10</label>
-            <input type="varchar" id="kodeutama" name="kodeutama" value="<?php echo $row['kodeutama']; ?>">
-        </div>
-
-        <div class="form-group">
-            <label for="anamnesis">Anamnesis</label>
-            <input type="text" id="anamnesis" name="anamnesis" value="<?php echo $row['anamnesis']; ?>">
-        </div>
-        <div class="form-group">
-            <label for="pemeriksaanfisik">Pemeriksaan Fisik</label>
-            <input type="varchar" id="pemeriksaanfisik" name="pemeriksaanfisik" value="<?php echo $row['pemeriksaanfisik']; ?>">
-        </div>
-        <div class="form-group">
-            <label for="obat">Obat yang diresepkan</label>
-            <input type="varchar" id="obat" name="obat" value="<?php echo $row['obat']; ?>">
-        </div>
-        <div class="form-group">
-            <label for="tindakan">Pengobatan atau tindak lanjut</label>
-            <input type="varchar" id="tindakan" name="tindakan" value="<?php echo $row['tindakan']; ?>">
-        </div>
-            <div class="form-group">
-                <label for="statusrm">Status pengisian RM</label>
-                <input type="text" id="statusrm" name="statusrm" value="<?php echo $row['statusrm']; ?>">
-            </div>
-        <div class="signature-section">
-            <p>Tasikmalaya, <span class="date">29 Februari</span> 2025</p>
-            <div class="signature"><img src="property/download-removebg-preview.png" alt="Signature" class="signature-image">
-            <p>(dr. Jovan Sp. Assasin)</p>
-        </div>
-        <div class="form-buttons">
-            <a href="index.php"><button style='font-size:20px' type="button">Batal <i class='fas fa-trash-alt'></i></button></a>
-            <a href="index.php"><button style='font-size:20px'>Simpan  <i class='fas fa-save' ></i></button></a>
-        </div>
-        </div>
-    </form>
-</form>
-</body>
 </html>
