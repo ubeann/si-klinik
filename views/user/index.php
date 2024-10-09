@@ -84,8 +84,8 @@ use function App\Helpers\route;
                         <td><?= $user['address'] ?? '-' ?></td>
                         <td><?= strtoupper($user['role']) ?></td>
                         <td>
-                            <a href="<?= route('patients/form-edit?id=' . $patient['id']) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
-                            <a href="<?= route('patients/delete?id=' . $patient['id']) ?>" class="delete-button" onclick="return confirm('Anda yakin ingin menghapus data ini?')"><i class="fas fa-trash-alt"></i></a>
+                            <a href="<?= route('patients/form-edit?id=' . $user['id']) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
+                            <a href="<?= route('users/delete?id=' . $user['id']) ?>" class="delete-button" onclick="return confirm('Anda yakin ingin menghapus data ini?')"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

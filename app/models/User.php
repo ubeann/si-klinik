@@ -466,4 +466,39 @@ class User extends Model
 
         return $links;
     }
+
+    /**
+     * Load a patient record by ID
+     *
+     * @param int $id The ID of the patient to load
+     * @return bool True if the patient was loaded successfully, false otherwise
+     */
+    public function load(int $id): bool
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = :id LIMIT 1";
+        $stmt = $this->query($sql, ['id' => $id]);
+
+        if ($patientData = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $this->setProperties($patientData);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete a user record by ID
+     *
+     * This method deletes the user record with the specified ID from the database.
+     *
+     * @param int $id The ID of the user to delete
+     * @return bool True if the user was deleted successfully, false otherwise
+     */
+    public function delete(int $id): bool
+    {
+        $sql = "DELETE FROM {$this->table} WHERE id = :id";
+        $stmt = $this->query($sql, ['id' => $id]);
+
+        return $stmt->rowCount() > 0;
+    }
 }

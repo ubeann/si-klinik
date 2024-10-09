@@ -127,4 +127,43 @@ class UserController extends Controller
         // Redirect to the home page
         header('Location: '. '/users');
     }
+
+    /**
+     * Delete a user record.
+     *
+     * This method handles the "delete" action for the user page.
+     * It deletes the user record with the specified ID from the database.
+     *
+     * @return void
+     */
+    public function delete(): void {
+        // Initialize an instance of the User model
+        $user = new User();
+
+        // Load the user record to be deleted
+        $user->load($_GET['id']);
+
+        // Check if the user is trying to delete their own account
+        if ($_SESSION['user']['email'] === $user->getEmail()) {
+            // Create an error message for unauthorized access
+            $_SESSION['errors']['delete'] = 'You cannot delete your own account.';
+
+            // Redirect to the user list page
+            header('Location: '. '/users');
+            exit;
+        }
+
+        // Delete the user record
+        $success = $user->delete($_GET['id']);
+
+        // Create a success message
+        if ($success) {
+            $_SESSION['success'] = 'User deleted successfully.';
+        } else {
+            $_SESSION['errors']['delete'] = 'Failed to delete user.';
+        }
+
+        // Redirect to the user list page
+        header('Location: '. '/users');
+    }
 }

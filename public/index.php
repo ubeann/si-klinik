@@ -45,6 +45,7 @@ $router->addRoute('/patients/delete', PatientController::class, 'delete');
 $router->addRoute('/users', UserController::class, 'index');
 $router->addRoute('/users/form-register', UserController::class, 'registerForm');
 $router->addRoute('/users/register', UserController::class, 'register');
+$router->addRoute('/users/delete', UserController::class, 'delete');
 
 // Get the current URL
 $url = $_SERVER['REQUEST_URI'];
