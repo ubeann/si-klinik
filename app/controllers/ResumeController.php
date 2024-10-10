@@ -98,6 +98,6 @@ class ResumeController extends Controller
         $patient->load($_GET['id']);
 
         // Render the resume form view (located in the 'views/resume/form.php' file).
-        $this->view('resume/form', ['patient' => $patient]);
+        $this->view('resume/form', ['patient' => $patient, 'id' => $_GET['id']]);
     }
 }

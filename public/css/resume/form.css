@@ -88,6 +88,10 @@ form {
     width: 100%;
 }
 
+.row:has(textarea) {
+    align-items: start;
+}
+
 .column {
     display: flex;
     align-items: center;
@@ -97,6 +101,13 @@ form {
 label {
     width: 20%;
     font-weight: bold;
+}
+
+.row:has(input:required) label:after,
+.row:has(textarea:required) label:after,
+.row:has(select:required) label:after {
+    content: '*';
+    color: red;
 }
 
 input,

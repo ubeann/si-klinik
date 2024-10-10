@@ -9,68 +9,384 @@ use function App\Helpers\route;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Medis</title>
+    <title>Form Rekam Medis Bencana</title>
     <link rel="stylesheet" href="<?= asset('css/resume/form.css') ?>">
     <script src="https://kit.fontawesome.com/c2dc05efdd.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div class="container">
-        <h2>Resume Medis: <?= $patient->getMedicalRecordNumber() ?></h2>
-        <form method="POST" action="<?= route('resume/save') ?>">
-            <div class="row">
-                <label>No. RM:</label><input disabled type="text" value="<?= $patient->getMedicalRecordNumber() ?>">
-            </div>
-            <div class="row">
-                <label>Nama pasien</label><input disabled type="text" value="<?= $patient->getFullName() ?>">
-            </div>
-            <div class="row">
-                <div class="column" style="width: 70%;">
-                    <label for="initial_diagnosis" style="width: 27%;">Diagnosa Awal</label>
-                    <input type="text" name="initial_diagnosis" id="initial_diagnosis" style="width: 68%;">
+        <h1 style="text-align: center;">Form Rekam Medis Bencana: <?= $patient->getMedicalRecordNumber() ?></h1>
+        <form method="POST" action="<?= route('resume/save?id=' . $id) ?>">
+            <div>
+                <h2 style="text-align: left;">
+                    <i class="fas fa-user"></i>&nbsp;
+                    Data Pasien
+                </h2>
+                <div class="row">
+                    <label>No. RM:</label><input disabled type="text" value="<?= $patient->getMedicalRecordNumber() ?>">
                 </div>
-                <div class="column" style="width: 50%;">
-                    <label for="initial_icd_code" style="width: 60px;">ICD-10</label>
-                    <input type="text" name="initial_icd_code" id="initial_icd_code" style="width: 100%;">
+                <div class="row">
+                    <label>Nama pasien</label><input disabled type="text" value="<?= $patient->getFullName() ?>">
                 </div>
-            </div>
-            <div class="row">
-                <div class="column" style="width: 70%;">
-                    <label for="primary_diagnosis" style="width: 27%;">Diagnosa Utama</label>
-                    <input type="text" name="primary_diagnosis" id="primary_diagnosis" style="width: 68%;">
+                <div class="row">
+                    <label>Tanggal lahir</label><input disabled type="text" value="<?= $patient->getBirthDate() ?>">
                 </div>
-                <div class="column" style="width: 50%;">
-                    <label for="primary_icd_code" style="width: 60px;">ICD-10</label>
-                    <input type="text" name="primary_icd_code" id="primary_icd_code" style="width: 100%;">
+                <div class="row">
+                    <label>Jenis Kelamin</label><input disabled type="text" value="<?= $patient->getGender() === 'l' ? 'Laki-laki' : 'Perempuan' ?>">
+                </div>
+                <div class="row">
+                    <label>Alamat</label><input disabled type="text" value="<?= $patient->getAddress() ?>">
                 </div>
             </div>
-            <div class="row">
-                <label>Anamnesis</label><textarea name="anamnesis"></textarea>
-            </div>
-            <div class="row">
-                <label>Pemeriksaan Fisik</label><textarea name="physical_examination"></textarea>
-            </div>
-            <div class="row">
-                <label>Obat yang diresepkan</label><textarea name="prescribed_medication"></textarea>
-            </div>
-            <div class="row">
-                <label>Pengobatan atau tindak lanjut</label><textarea name="treatment_or_follow_up"></textarea>
-            </div>
-            <div class="row">
-                <label for="status">Status Pengisian RM</label>
-                <select required name="status" id="status">
-                    <option value="not-filled" <?= $patient->getStatus() === 'not-filled' ? 'selected' : '' ?>>Belum Diisi</option>
-                    <option value="incomplete" <?= $patient->getStatus() === 'incomplete' ? 'selected' : '' ?>>Belum Dilengkapi</option>
-                    <option value="complete" <?= $patient->getStatus() === 'complete' ? 'selected' : '' ?>>Lengkap</option>
-                </select>
-            </div>
-            <div class="signature-section">
-                <p>Tasikmalaya, <?= date('d F Y') ?></p>
-                <div class="signature">
-                    <img src="<?= asset('assets/resume/doctor-signature.png') ?>" alt="Signature" class="signature-image">
-                    <p>(dr. Jovan Sp. Assasin)</p>
+
+            <hr>
+
+            <div>
+                <h2 style="text-align: left;">
+                    <i class="fas fa-notes-medical"></i>&nbsp;
+                    Informasi Rujukan
+                </h2>
+                <div class="row">
+                    <label for="is_referenced">Rujukan</label>
+                    <select required name="is_referenced" id="is_referenced">
+                        <option disabled selected value="">-- Pilih Rujukan --</option>
+                        <option value="1" <?= $patient->getIsReferenced() === '1' ? 'selected' : '' ?>>Ya</option>
+                        <option value="0" <?= $patient->getIsReferenced() === '0' ? 'selected' : '' ?>>Tidak</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label for="referral_source">Keterangan</label>
+                    <select required name="referral_source" id="referral_source">
+                        <option disabled selected value="">-- Pilih Keterangan --</option>
+                        <option value="hospital" <?= $patient->getReferralSource() === 'hospital' ? 'selected' : '' ?>>RS (Rumah Sakit)</option>
+                        <option value="clinic" <?= $patient->getReferralSource() === 'clinic' ? 'selected' : '' ?>>Pusk (Puskesmas)</option>
+                        <option value="doctor" <?= $patient->getReferralSource() === 'doctor' ? 'selected' : '' ?>>Dr (Dokter)</option>
+                        <option value="midwife" <?= $patient->getReferralSource() === 'midwife' ? 'selected' : '' ?>>Bidan</option>
+                        <option value="nurse" <?= $patient->getReferralSource() === 'nurse' ? 'selected' : '' ?>>Perawat</option>
+                        <option value="emergency_rj_rsd" <?= $patient->getReferralSource() === 'emergency_rj_rsd' ? 'selected' : '' ?>>RJ-RSD (Emergency room)</option>
+                        <option value="rna" <?= $patient->getReferralSource() === 'rna' ? 'selected' : '' ?>>RNA (Rawat Naik Ambulan)</option>
+                        <option value="sds" <?= $patient->getReferralSource() === 'sds' ? 'selected' : '' ?>>SDS (Sarana Darurat Siaga)</option>
+                        <option value="other" <?= $patient->getReferralSource() === 'other' ? 'selected' : '' ?>>Lain-lain (Other)</option>
+                    </select>
                 </div>
             </div>
+
+            <hr>
+
+            <div>
+                <h2 style="text-align: left;">
+                    <i class="fas fa-diagnoses"></i>&nbsp;
+                    Data Bencana
+                </h2>
+                <div class="row">
+                    <label for="disaster_type">Jenis Bencana</label>
+                    <select required name="disaster_type" id="disaster_type">
+                        <option disabled selected value="">-- Pilih Jenis Bencana --</option>
+                        <option value="earthquake" <?= $patient->getDisasterType() === 'earthquake' ? 'selected' : '' ?>>Gempa Bumi</option>
+                        <option value="tsunami" <?= $patient->getDisasterType() === 'tsunami' ? 'selected' : '' ?>>Tsunami</option>
+                        <option value="flood" <?= $patient->getDisasterType() === 'flood' ? 'selected' : '' ?>>Banjir</option>
+                        <option value="landslide" <?= $patient->getDisasterType() === 'landslide' ? 'selected' : '' ?>>Tanah Longsor</option>
+                        <option value="fire" <?= $patient->getDisasterType() === 'fire' ? 'selected' : '' ?>>Kebakaran</option>
+                        <option value="epidemic" <?= $patient->getDisasterType() === 'epidemic' ? 'selected' : '' ?>>Wabah</option>
+                        <option value="other" <?= $patient->getDisasterType() === 'other' ? 'selected' : '' ?>>Lain-lain</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label for="injury_type">Jenis Cedera</label>
+                    <select required name="injury_type" id="injury_type">
+                        <option disabled selected value="">-- Pilih Jenis Cedera --</option>
+                        <option value="blunt_force" <?= $patient->getInjuryType() === 'blunt_force' ? 'selected' : '' ?>>Tumpul</option>
+                        <option value="sharp_object" <?= $patient->getInjuryType() === 'sharp_object' ? 'selected' : '' ?>>Tajam</option>
+                        <option value="gunshot" <?= $patient->getInjuryType() === 'gunshot' ? 'selected' : '' ?>>Peluru</option>
+                        <option value="burn" <?= $patient->getInjuryType() === 'burn' ? 'selected' : '' ?>>Bakar</option>
+                        <option value="poisoning" <?= $patient->getInjuryType() === 'poisoning' ? 'selected' : '' ?>>Keracunan</option>
+                        <option value="drowning" <?= $patient->getInjuryType() === 'drowning' ? 'selected' : '' ?>>Tenggelam</option>
+                        <option value="asphyxia" <?= $patient->getInjuryType() === 'asphyxia' ? 'selected' : '' ?>>Afiksia</option>
+                        <option value="other" <?= $patient->getInjuryType() === 'other' ? 'selected' : '' ?>>Lain-lain</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr>
+
+            <div>
+                <h2 style="text-align: left;">
+                    <i class="fas fa-file-medical-alt"></i>&nbsp;
+                    Data Medis
+                </h2>
+                <img src="<?= asset('assets/resume/local-status.png') ?>" alt="Status Lokal" style="margin-bottom: 16px;">
+                <div class="row">
+                    <label for="local_status_range">Status Lokal (Range)</label>
+                    <select required name="local_status_range" id="local_status_range">
+                        <option disabled selected value="">-- Pilih Status Lokal (Range) --</option>
+                        <option value="00-09" <?= $patient->getLocalStatusRange() === '00-09' ? 'selected' : '' ?>>00-09</option>
+                        <option value="10-19" <?= $patient->getLocalStatusRange() === '10-19' ? 'selected' : '' ?>>10-19</option>
+                        <option value="20-29" <?= $patient->getLocalStatusRange() === '20-29' ? 'selected' : '' ?>>20-29</option>
+                        <option value="30-39" <?= $patient->getLocalStatusRange() === '30-39' ? 'selected' : '' ?>>30-39</option>
+                        <option value="40-49" <?= $patient->getLocalStatusRange() === '40-49' ? 'selected' : '' ?>>40-49</option>
+                        <option value="50-59" <?= $patient->getLocalStatusRange() === '50-59' ? 'selected' : '' ?>>50-59</option>
+                        <option value="60-69" <?= $patient->getLocalStatusRange() === '60-69' ? 'selected' : '' ?>>60-69</option>
+                        <option value="70-79" <?= $patient->getLocalStatusRange() === '70-79' ? 'selected' : '' ?>>70-79</option>
+                        <option value="80-89" <?= $patient->getLocalStatusRange() === '80-89' ? 'selected' : '' ?>>80-89</option>
+                        <option value="90-99" <?= $patient->getLocalStatusRange() === '90-99' ? 'selected' : '' ?>>90-99</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label for="local_status_color">Status Lokal (Warna)</label>
+                    <select required name="local_status_color" id="local_status_color">
+                        <option disabled selected value="">-- Pilih Status Lokal (Warna) --</option>
+                        <option value="green" <?= $patient->getLocalStatusColor() === 'green' ? 'selected' : '' ?>>Hijau (Green)</option>
+                        <option value="yellow" <?= $patient->getLocalStatusColor() === 'yellow' ? 'selected' : '' ?>>Kuning (Yellow)</option>
+                        <option value="red" <?= $patient->getLocalStatusColor() === 'red' ? 'selected' : '' ?>>Merah (Red)</option>
+                        <option value="black" <?= $patient->getLocalStatusColor() === 'black' ? 'selected' : '' ?>>Hitam (Black)</option>
+                        <option value="white" <?= $patient->getLocalStatusColor() === 'white' ? 'selected' : '' ?>>Putih (White)</option>
+                        <option value="blue" <?= $patient->getLocalStatusColor() === 'blue' ? 'selected' : '' ?>>Biru (Blue)</option>
+                        <option value="orange" <?= $patient->getLocalStatusColor() === 'orange' ? 'selected' : '' ?>>Oranye (Orange)</option>
+                        <option value="other" <?= $patient->getLocalStatusColor() === 'other' ? 'selected' : '' ?>>Lain-lain (Other)</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label for="alergies">Alergi</label>
+                    <textarea required name="alergies" id="alergies" placeholder="Tulis alergi pasien (seperti obat, makanan, dll)" style="margin-bottom: 16px;"><?= $patient->getAllergies() ?></textarea>
+                </div>
+            </div>
+
+            <hr>
+
+            <div>
+                <h2 style="text-align: left;">
+                    <i class="fas fa-user-clock"></i>&nbsp;
+                    Data Penemuan Pasien
+                </h2>
+                <div class="row">
+                    <label for="discovery_timestamp">Waktu Ditemukan</label>
+                    <input required type="datetime-local" name="discovery_timestamp" id="discovery_timestamp" value="<?= $patient->getDiscoveryTimestamp() ?>">
+                </div>
+                <div class="row">
+                    <label for="discovery_location">Lokasi Ditemukan</label>
+                    <input required type="text" name="discovery_location" id="discovery_location" value="<?= $patient->getDiscoveryLocation() ?>" placeholder="Tulis lokasi ditemukan pasien">
+                </div>
+            </div>
+
+            <hr>
+
+            <div>
+                <h2 style="text-align: left;">
+                    <i class="fas fa-user-md"></i>&nbsp;
+                    Tanda Vital
+                </h2>
+                <div class="row">
+                    <label for="vital_sign_blood_pressure">Tekanan Darah (mmHg):</label>
+                    <input required type="text" name="vital_sign_blood_pressure" id="vital_sign_blood_pressure" value="<?= $patient->getVitalSignBloodPressure() ?>" placeholder="Tulis tekanan darah pasien">
+                </div>
+                <div class="row">
+                    <label for="vital_sign_pulse">Denyut Nadi (bpm):</label>
+                    <input required type="text" name="vital_sign_pulse" id="vital_sign_pulse" value="<?= $patient->getVitalSignPulse() ?>" placeholder="Tulis nadi pasien">
+                </div>
+                <div class="row">
+                    <label for="vital_sign_respiratory_rate">Respirasi (kali/menit)</label>
+                    <input required type="text" name="vital_sign_respiratory_rate" id="vital_sign_respiratory_rate" value="<?= $patient->getVitalSignRespiratoryRate() ?>" placeholder="Tulis respirasi pasien">
+                </div>
+                <div class="row">
+                    <label for="vital_sign_temperature">Suhu (°C)</label>
+                    <input required type="text" name="vital_sign_temperature" id="vital_sign_temperature" value="<?= $patient->getVitalSignTemperature() ?>" placeholder="Tulis suhu pasien">
+                </div>
+            </div>
+
+            <hr>
+
+            <div>
+                <h2 style="text-align: left;">
+                    <i class="fas fa-user-injured"></i>&nbsp;
+                    Kondisi Pasien
+                </h2>
+                <img src="<?= asset('assets/resume/condition.png') ?>" alt="Tipe Kondisi" style="margin-bottom: 16px;">
+                <div class="row">
+                    <label for="condition_color">Kondisi</label>
+                    <select required name="condition_color" id="condition_color">
+                        <option disabled selected value="">-- Pilih Kondisi --</option>
+                        <option value="P1" <?= $patient->getConditionColor() === 'P1' ? 'selected' : '' ?>>P1 (Gawat dan Darurat)</option>
+                        <option value="P2" <?= $patient->getConditionColor() === 'P2' ? 'selected' : '' ?>>P2 (Gawat dan Tidak Darurat)</option>
+                        <option value="P3" <?= $patient->getConditionColor() === 'P3' ? 'selected' : '' ?>>P3 (Tidak Gawat dan Tidak Darurat)</option>
+                        <option value="P4" <?= $patient->getConditionColor() === 'P4' ? 'selected' : '' ?>>P4 (Meninggal)</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr>
+
+            <div>
+                <h2 style="text-align: left;">
+                    <i class="fas fa-eye"></i>&nbsp;
+                    Pemeriksaan Awal
+                </h2>
+                <div class="row">
+                    <label for="pupil_status">Status Pupil</label>
+                    <select required name="pupil_status" id="pupil_status">
+                        <option disabled selected value="">-- Pilih Status Pupil --</option>
+                        <option value="isokor" <?= $patient->getPupilStatus() === 'isokor' ? 'selected' : '' ?>>Isokor</option>
+                        <option value="anisokor" <?= $patient->getPupilStatus() === 'anisokor' ? 'selected' : '' ?>>Anisokor</option>
+                        <option value="miotic" <?= $patient->getPupilStatus() === 'miotic' ? 'selected' : '' ?>>Miotik</option>
+                        <option value="mydriatic" <?= $patient->getPupilStatus() === 'mydriatic' ? 'selected' : '' ?>>Midriatik</option>
+                        <option value="other" <?= $patient->getPupilStatus() === 'other' ? 'selected' : '' ?>>Lain-lain (Other)</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label for="light_reflex_left">Refleks Cahaya Kiri</label>
+                    <input required type="text" name="light_reflex_left" id="light_reflex_left" value="<?= $patient->getLightReflexLeft() ?>" placeholder="Tulis refleks cahaya kiri pasien">
+                </div>
+                <div class="row">
+                    <label for="light_reflex_right">Refleks Cahaya Kanan</label>
+                    <input required type="text" name="light_reflex_right" id="light_reflex_right" value="<?= $patient->getLightReflexRight() ?>" placeholder="Tulis refleks cahaya kanan pasien">
+                </div>
+                <div class="row">
+                    <label for="airway_c_spine">Airway C-Spine</label>
+                    <select required name="airway_c_spine" id="airway_c_spine">
+                        <option disabled selected value="">-- Pilih Airway C-Spine --</option>
+                        <option value="clear" <?= $patient->getAirwayCSpine() === 'clear' ? 'selected' : '' ?>>Bersih</option>
+                        <option value="sputum" <?= $patient->getAirwayCSpine() === 'sputum' ? 'selected' : '' ?>>Slem Sumbatan</option>
+                        <option value="partial" <?= $patient->getAirwayCSpine() === 'partial' ? 'selected' : '' ?>>Parsial</option>
+                        <option value="total" <?= $patient->getAirwayCSpine() === 'total' ? 'selected' : '' ?>>Sumbatan Total</option>
+                        <option value="other" <?= $patient->getAirwayCSpine() === 'other' ? 'selected' : '' ?>>Lain-lain</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label for="breathing_status">Pernapasan</label>
+                    <select required name="breathing_status" id="breathing_status">
+                        <option disabled selected value="">-- Pilih Pernapasan --</option>
+                        <option value="normal" <?= $patient->getBreathingStatus() === 'normal' ? 'selected' : '' ?>>Normal</option>
+                        <option value="wheezing" <?= $patient->getBreathingStatus() === 'wheezing' ? 'selected' : '' ?>>Wheezing</option>
+                        <option value="ronchi" <?= $patient->getBreathingStatus() === 'ronchi' ? 'selected' : '' ?>>Ronchi</option>
+                        <option value="retraction" <?= $patient->getBreathingStatus() === 'retraction' ? 'selected' : '' ?>>Retraksi</option>
+                        <option value="nasal-flaring" <?= $patient->getBreathingStatus() === 'nasal-flaring' ? 'selected' : '' ?>>Nasal Flaring</option>
+                        <option value="abnormal-position" <?= $patient->getBreathingStatus() === 'abnormal-position' ? 'selected' : '' ?>>Posisi Abnormal</option>
+                        <option value="other" <?= $patient->getBreathingStatus() === 'other' ? 'selected' : '' ?>>Lain-lain</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label for="circulation_status">Sirkulasi</label>
+                    <select required name="circulation_status" id="circulation_status">
+                        <option disabled selected value="">-- Pilih Sirkulasi --</option>
+                        <option value="pallor" <?= $patient->getCirculationStatus() === 'pallor' ? 'selected' : '' ?>>Pallor</option>
+                        <option value="mottling" <?= $patient->getCirculationStatus() === 'mottling' ? 'selected' : '' ?>>Motling</option>
+                        <option value="cyanosis" <?= $patient->getCirculationStatus() === 'cyanosis' ? 'selected' : '' ?>>Cyanosis</option>
+                        <option value="capillary-refill" <?= $patient->getCirculationStatus() === 'capillary-refill' ? 'selected' : '' ?>>Capillary Refill</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label for="gcs_disability_status">GCS (Glasgow Coma Scale)</label>
+                    <select required name="gcs_disability_status" id="gcs_disability_status">
+                        <option disabled selected value="">-- Pilih GCS (Glasgow Coma Scale) --</option>
+                        <option value="eye-movement" <?= $patient->getGcsDisabilityStatus() === 'eye-movement' ? 'selected' : '' ?>>Eye Movement</option>
+                        <option value="motor-reflex" <?= $patient->getGcsDisabilityStatus() === 'motor-reflex' ? 'selected' : '' ?>>Reflek Motorik</option>
+                        <option value="verbal" <?= $patient->getGcsDisabilityStatus() === 'verbal' ? 'selected' : '' ?>>Verbal</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label for="exposure_status">Eksposur</label>
+                    <select required name="exposure_status" id="exposure_status">
+                        <option disabled selected value="">-- Pilih Eksposur --</option>
+                        <option value="bleeding" <?= $patient->getExposureStatus() === 'bleeding' ? 'selected' : '' ?>>Pendarahan</option>
+                        <option value="fracture" <?= $patient->getExposureStatus() === 'fracture' ? 'selected' : '' ?>>Fraktur</option>
+                        <option value="paralysis" <?= $patient->getExposureStatus() === 'paralysis' ? 'selected' : '' ?>>Parase</option>
+                        <option value="plegia" <?= $patient->getExposureStatus() === 'plegia' ? 'selected' : '' ?>>Plegi</option>
+                        <option value="paraparesis" <?= $patient->getExposureStatus() === 'paraparesis' ? 'selected' : '' ?>>Paraperesis</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label for="prehospital_status">Pra Rumah Sakit</label>
+                    <select required name="prehospital_status" id="prehospital_status">
+                        <option disabled selected value="">-- Pilih Pra Rumah Sakit --</option>
+                        <option value="rjp" <?= $patient->getPrehospitalStatus() === 'rjp' ? 'selected' : '' ?>>RJP (Resusitasi Jantung Paru)</option>
+                        <option value="intubasi" <?= $patient->getPrehospitalStatus() === 'intubasi' ? 'selected' : '' ?>>Intubasi</option>
+                        <option value="oksigen" <?= $patient->getPrehospitalStatus() === 'oksigen' ? 'selected' : '' ?>>Oksigen</option>
+                        <option value="ecollar" <?= $patient->getPrehospitalStatus() === 'ecollar' ? 'selected' : '' ?>>Ecollar</option>
+                        <option value="balut" <?= $patient->getPrehospitalStatus() === 'balut' ? 'selected' : '' ?>>Balut/Bi</option>
+                        <option value="obat" <?= $patient->getPrehospitalStatus() === 'obat' ? 'selected' : '' ?>>Obat</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr>
+
+            <div>
+                <h2 style="text-align: left;">
+                    <i class="fas fa-medkit"></i>
+                    Rincian Medis
+                </h2>
+                <div class="row">
+                    <label for="anamnesis">Anamnesis</label>
+                    <textarea required name="anamnesis" id="anamnesis" placeholder="Jelaskan riwayat kesehatan, keluhan utama, dan gejala yang dialami pasien"  style="margin-bottom: 16px;"><?= $patient->getAnamnesis() ?></textarea>
+                </div>
+                <div class="row">
+                    <label for="diagnosis">Diagnosis</label>
+                    <textarea required name="diagnosis" id="diagnosis" placeholder="Tuliskan diagnosis utama dan diagnosis banding jika ada" style="margin-bottom: 16px;"><?= $patient->getDiagnosis() ?></textarea>
+                </div>
+                <div class="row">
+                    <label for="therapy">Terapi</label>
+                    <textarea required name="therapy" id="therapy" placeholder="Cantumkan jenis pengobatan, dosis obat, dan durasi pemberian terapi" style="margin-bottom: 16px;"><?= $patient->getTherapy() ?></textarea>
+                </div>
+                <div class="row">
+                    <label for="actions_taken">Tindak Lanjut</label>
+                    <textarea required name="actions_taken" id="actions_taken" placeholder="Jelaskan rencana perawatan selanjutnya, rujukan, atau instruksi khusus untuk pasien" style="margin-bottom: 16px;"><?= $patient->getActionsTaken() ?></textarea>
+                </div>
+            </div>
+
+            <hr>
+
+            <div>
+                <h2 style="text-align: left;">
+                    <i class="fas fa-user-friends"></i>&nbsp;
+                    Data Penemu Pasien
+                </h2>
+                <div class="row">
+                    <label for="finder_full_name">Nama Lengkap Penemu</label>
+                    <input required type="text" name="finder_full_name" id="finder_full_name" value="<?= $patient->getFinderFullName() ?>" placeholder="Masukkan nama lengkap penemu">
+                </div>
+                <div class="row">
+                    <label for="finder_age">Usia Penemu</label>
+                    <input required type="text" name="finder_age" id="finder_age" value="<?= $patient->getFinderAge() ?>" placeholder="Contoh: 25">
+                </div>
+                <div class="row">
+                    <label for="finder_gender">Jenis Kelamin Penemu</label>
+                    <select required name="finder_gender" id="finder_gender">
+                        <option disabled selected value="">-- Pilih jenis kelamin --</option>
+                        <option value="l" <?= $patient->getFinderGender() === 'l' ? 'selected' : '' ?>>Laki-laki</option>
+                        <option value="p" <?= $patient->getFinderGender() === 'p' ? 'selected' : '' ?>>Perempuan</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label for="finder_phone_number">Nomor Handphone Penemu</label>
+                    <input required type="tel" name="finder_phone_number" id="finder_phone_number" value="<?= $patient->getFinderPhoneNumber() ?>" placeholder="Contoh: 08123456789">
+                </div>
+                <div class="row">
+                    <label for="finder_address">Alamat Lengkap Penemu</label>
+                     <textarea required name="finder_address" id="finder_address" placeholder="Masukkan alamat lengkap termasuk RT/RW"><?= $patient->getFinderAddress() ?></textarea>
+                </div>
+            </div>
+
+            <hr>
+
+            <div>
+                <h2 style="text-align: left;">
+                    <i class="fas fa-user-check"></i>&nbsp;
+                    Konfirmasi Pasien
+                </h2>
+                <div class="row">
+                    <label for="confirmation_datetime">Tanggal dan Waktu</label>
+                    <input required type="datetime-local" name="confirmation_datetime" id="confirmation_datetime" value="<?= $patient->getConfirmationDatetime() ?>">
+                </div>
+                <div class="row">
+                    <label for="confirmation_issue">Masalah</label>
+                    <textarea required name="confirmation_issue" id="confirmation_issue" placeholder="Tuliskan masalah yang dihadapi pasien" style="margin-bottom: 16px;"><?= $patient->getConfirmationIssue() ?></textarea>
+                </div>
+                <div class="row">
+                    <label for="confirmation_therapy">Terapi</label>
+                    <textarea required name="confirmation_therapy" id="confirmation_therapy" placeholder="Tuliskan terapi yang diberikan kepada pasien" style="margin-bottom: 16px;"><?= $patient->getConfirmationTherapy() ?></textarea>
+                </div>
+            </div>
+
             <div class="buttons">
                 <a class="btn-reset" href="<?= route('resume') ?>">
                     Batal

@@ -148,10 +148,10 @@ class Patient extends Model
 
     // Constants for valid field values for condition status
     private const VALID_CONDITION_COLORS = [
-        'P1',               // P1
-        'P2',               // P2
-        'P3',               // P3
-        'P4',               // P4
+        'P1',               // P1 (Gawat dan Darurat)
+        'P2',               // P2 (Gawat dan Tidak Darurat)
+        'P3',               // P3 (Tidak Gawat dan Tidak Darurat)
+        'P4',               // P4 (Meninggal)
     ];
 
     // Constants for valid field values for initial examination
