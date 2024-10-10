@@ -99,8 +99,8 @@ use function App\Helpers\route;
                         <td><?= $epidemiologi['diagnosis'] ?></td>
                         <td><?= date('d M Y', strtotime($epidemiologi['diagnosis_date'])) ?></td>
                         <td style="text-align: center;">
-                            <a href="<?= route('patients/form-edit?id=' . $patient['id']) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
-                            <a href="<?= route('patients/delete?id=' . $patient['id']) ?>" class="delete-button" onclick="return confirm('Anda yakin ingin menghapus data ini?')"><i class="fas fa-trash-alt"></i></a>
+                            <a href="<?= route('epidemiologi/form-edit?id=' . $epidemiologi['id']) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
+                            <a href="<?= route('epidemiologi/delete?id=' . $epidemiologi['id']) ?>" class="delete-button" onclick="return confirm('Anda yakin ingin menghapus data ini?')"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

@@ -329,11 +329,12 @@ class Epidemiologi extends Model
     // Getters
     public function getFullName(): string { return $this->fullName; }
     public function getNationalIdNumber(): string { return $this->nationalIdNumber; }
+    public function getGender(): string { return $this->gender; }
     public function getAge(): int { return $this->age; }
     public function getAddress(): string { return $this->address; }
     public function getDiagnosis(): string { return $this->diagnosis; }
     public function getDiagnosisDate(): string { return $this->diagnosisDate; }
-    public function getGender(): string
+    public function getGenderLabel(): string
     {
         switch ($this->gender) {
             case 'l': return 'Laki-laki';

@@ -119,4 +119,72 @@ class EpidemiologiController extends Controller
         header('Location: '. '/epidemiologi');
         exit;
     }
+
+    /**
+     * Display the epidemiologi edit form.
+     *
+     * This method handles the "edit" action for the epidemiologi page.
+     * It retrieves the epidemiologi record with the specified ID from the database
+     * and displays the epidemiologi edit form.
+     *
+     * @return void
+     */
+    public function editForm(): void {
+        // Initialize an instance of the Epidemiologi model
+        $epidemiologi = new Epidemiologi();
+
+        // Get the epidemiologi record with the specified ID
+        $epidemiologi->load($_GET['id']);
+
+        // Render the epidemiologi edit form view (located in the 'views/epidemiologi/edit.php' file).
+        $this->view('epidemiologi/edit', ['epidemiologi' => $epidemiologi, 'id' => $_GET['id']]);
+    }
+
+    /**
+     * Update a epidemiologi record.
+     *
+     * This method handles the "edit" action for the epidemiologi edit form.
+     * It processes the form submission, validates the input data, and updates
+     * the epidemiologi record with the specified ID in the database.
+     *
+     * @return void
+     */
+    public function edit(): void {
+        // Redirect to the form registration page when the method is not POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: '. '/epidemiologi/form-edit?id=' . $_GET['id']);
+            exit;
+        }
+
+        // Initialize an instance of the Epidemiologi model
+        $epidemiologi = new Epidemiologi();
+
+        // Get the epidemiologi record with the specified ID
+        $epidemiologi->load($_GET['id']);
+
+        // Set properties of the epidemiologi object
+        $epidemiologi->setProperties($_POST);
+
+        // Validate the form data
+        $errors = $epidemiologi->validate($_POST);
+
+        // When there are validation errors, store the errors in the session
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+
+            // Redirect back to the epidemiologi edit form
+            header('Location: '. '/epidemiologi/form-edit?id=' . $_GET['id']);
+            exit;
+        }
+
+        // Update the epidemiologi record in the database
+        $epidemiologi->update($_GET['id']);
+
+        // Create a success message
+        $_SESSION['success'] = 'Epidemiologi data has been successfully updated.';
+
+        // Redirect to the patient list page
+        header('Location: '. '/epidemiologi');
+        exit;
+    }
 }
