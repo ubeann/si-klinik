@@ -128,3 +128,12 @@ th {
     border-radius: 4px;
     background-color: #dff0d8;
 }
+
+.download-button {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+}

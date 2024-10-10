@@ -34,7 +34,12 @@ use function App\Helpers\route;
     </header>
     <div class="container">
         <div class="header">
-            <div></div>
+            <div>
+                <!-- Download CSV Button -->
+                <a href="<?= route('resume/download/csv') ?>" class="download-button">
+                    <i class="fas fa-download"></i> Unduh Data Pasien
+                </a>
+            </div>
             <div>
                 <form action="<?= route('resume') ?>" method="get">
                     <label for="status">Filter:</label>
@@ -75,11 +80,11 @@ use function App\Helpers\route;
                 <tr>
                     <th>No. RM</th>
                     <th>Nama Pasien</th>
-                    <th>Diagnosa Awal (ICD-10)</th>
-                    <th>Diagnosa Utama (ICD-10)</th>
+                    <th>Jenis Bencana</th>
+                    <th>Jenis Cedera</th>
                     <th>Anamnesis</th>
-                    <th>Pemeriksaan Fisik</th>
-                    <th>Resep Obat</th>
+                    <th>Diagnosis</th>
+                    <th>Terapi</th>
                     <th>Tindak Lanjut</th>
                     <th>Status RM</th>
                     <th>Aksi</th>
@@ -90,19 +95,57 @@ use function App\Helpers\route;
                     <tr>
                         <td><?= $patient['medical_record_number'] ?></td>
                         <td><?= $patient['full_name'] ?></td>
-                        <td><?= $patient['initial_diagnosis'] ?? '-' ?> <?= $patient['initial_diagnosis'] ? '(ICD-10: ' . ($patient['initial_icd_code'] ?? '-') . ')' : '' ?></td>
-                        <td><?= $patient['primary_diagnosis'] ?? '-' ?> <?= $patient['primary_diagnosis'] ? '(ICD-10: ' . ($patient['primary_icd_code'] ?? '-') . ')' : '' ?></td>
+                        <td>
+                            <?php if ($patient['disaster_type'] === 'earthquake') : ?>
+                                Gempa Bumi
+                            <?php elseif ($patient['disaster_type'] === 'tsunami') : ?>
+                                Tsunami
+                            <?php elseif ($patient['disaster_type'] === 'flood') : ?>
+                                Banjir
+                            <?php elseif ($patient['disaster_type'] === 'landslide') : ?>
+                                Tanah Longsor
+                            <?php elseif ($patient['disaster_type'] === 'fire') : ?>
+                                Kebakaran
+                            <?php elseif ($patient['disaster_type'] === 'epidemic') : ?>
+                                Wabah
+                            <?php elseif ($patient['disaster_type'] === 'other') : ?>
+                                Lain-lain
+                            <?php else : ?>
+                                -
+                            <?php endif ?>
+                        </td>
+                        <td>
+                            <?php if ($patient['injury_type'] === 'blunt_force') : ?>
+                                Tumpul
+                            <?php elseif ($patient['injury_type'] === 'sharp_object') : ?>
+                                Tajam
+                            <?php elseif ($patient['injury_type'] === 'gunshot') : ?>
+                                Peluru
+                            <?php elseif ($patient['injury_type'] === 'burn') : ?>
+                                Bakar
+                            <?php elseif ($patient['injury_type'] === 'poisoning') : ?>
+                                Keracunan
+                            <?php elseif ($patient['injury_type'] === 'drowning') : ?>
+                                Tenggelam
+                            <?php elseif ($patient['injury_type'] === 'asphyxia') : ?>
+                                Afiksia
+                            <?php elseif ($patient['injury_type'] === 'other') : ?>
+                                Lain-lain
+                            <?php else : ?>
+                                -
+                            <?php endif ?>
+                        </td>
                         <td><?= $patient['anamnesis'] ?? '-' ?></td>
-                        <td><?= $patient['physical_examination'] ?? '-' ?></td>
-                        <td><?= $patient['prescribed_medication'] ?? '-' ?></td>
-                        <td><?= $patient['treatment_or_follow_up'] ?? '-' ?></td>
+                        <td><?= $patient['diagnosis'] ?? '-' ?></td>
+                        <td><?= $patient['therapy'] ?? '-' ?></td>
+                        <td><?= $patient['actions_taken'] ?? '-' ?></td>
                         <td>
                             <?php if ($patient['status'] === 'not-filled') : ?>
-                                <a href="<?= route('resume', ['id' => $patient['id']]) ?>" style="color: red; text-decoration: underline">Belum Diisi</a>
+                                <span style="color: red;">Belum Diisi</span>
                             <?php elseif ($patient['status'] === 'incomplete') : ?>
-                                <a href="<?= route('indexresume', ['id' => $patient['id']]) ?>" style="color: orange; text-decoration: underline">Belum Dilengkapi</a>
+                                <span style="color: orange;">Belum Dilengkapi</span>
                             <?php else : ?>
-                                <a href="<?= route('indexresume', ['id' => $patient['id']]) ?>" style="color: green; text-decoration: underline">Lengkap</a>
+                                <span style="color: green;">Lengkap</span>
                             <?php endif ?>
                         </td>
                         <td>

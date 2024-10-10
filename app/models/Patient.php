@@ -26,12 +26,184 @@ class Patient extends Model
     private string $maritalStatus = '';
     private string $status = 'active'; // Default status is 'active'
 
+    // Referral information attributes
+    private bool $isReferenced = false;
+    private string $referralSource = '';
+
+    // Disaster medical records attributes
+    private string $disasterType = '';
+    private string $injuryType = '';
+
+    // Local status attributes
+    private string $localStatusRange = '';
+    private string $localStatusColor = '';
+    private string $allergies = '';
+
+    // Discovery details attributes
+    private string $discoveryTimestamp = '';
+    private string $discoveryLocation = '';
+
+    // Vital signs and initial assessment attributes
+    private string $vitalSignBloodPressure = '';
+    private int $vitalSignPulse = 0;
+    private int $vitalSignRespiratoryRate = 0;
+    private float $vitalSignTemperature = 0.0;
+
+    // Condition status attributes
+    private string $conditionColor = '';
+
+    // Initial examination attributes
+    private string $pupilStatus = '';
+    private bool $lightReflexLeft = false;
+    private bool $lightReflexRight = false;
+    private string $airwayCSpine = '';
+    private string $breathingStatus = '';
+    private string $circulationStatus = '';
+    private string $gcsDisabilityStatus = '';
+    private string $exposureStatus = '';
+    private string $prehospitalStatus = '';
+
+    // Medical details attributes
+    private string $anamnesis = '';
+    private string $diagnosis = '';
+    private string $therapy = '';
+    private string $actionsTaken = '';
+
+    // Finder's details attributes
+    private string $finderFullName = '';
+    private int $finderAge = 0;
+    private string $finderGender = '';
+    private string $finderAddress = '';
+    private string $finderPhoneNumber = '';
+
+    // Additional confirmation attributes
+    private string $confirmationDatetime = '';
+    private string $confirmationIssue = '';
+    private string $confirmationTherapy = '';
+
     // Constants for valid field values
     private const VALID_GENDERS = ['l', 'p']; // Valid gender options
     private const VALID_RELIGIONS = ['islam', 'catholic', 'protestant', 'hindu', 'buddha', 'other']; // Valid religion options
     private const VALID_EDUCATION_LEVELS = ['sd', 'smp', 'sma', 'd1', 'd2', 'd3', 'd4', 's1', 's2', 's3']; // Valid education levels
     private const VALID_MARITAL_STATUS = ['single', 'married', 'divorced', 'widowed']; // Valid marital status options
     private const VALID_STATUS = ['not-filled', 'incomplete', 'complete']; // Valid status options
+
+    // Constants for valid field values for referral information
+    private const VALID_REFERRAL_SOURCES = [
+        'hospital',         // RS (Rumah Sakit)
+        'clinic',           // Pusk (Puskesmas)
+        'doctor',           // Dr (Dokter)
+        'midwife',          // Bidan
+        'nurse',            // Perawat
+        'emergency_rj_rsd', // RJ-RSD (Emergency room)
+        'rna',              // RNA (Rawat Naik Ambulan)
+        'sds',              // SDS (Sarana Darurat Siaga)
+        'other'             // Lain-lain (Other)
+    ];
+
+    // Constants for valid field values for disaster medical records
+    private const VALID_DISASTER_TYPES = [
+        'earthquake',       // Gempa Bumi
+        'tsunami',          // Tsunami
+        'flood',            // Banjir
+        'landslide',        // Tanah Longsor
+        'fire',             // Kebakaran
+        'epidemic',         // Wabah
+        'other'             // Lain-lain (Other)
+    ];
+    private const VALID_INJURY_TYPES = [
+        'blunt_force',      // Tumpul (Blunt force)
+        'sharp_object',     // Tajam (Sharp object)
+        'gunshot',          // Peluru (Gunshot)
+        'burn',             // Bakar (Burn)
+        'poisoning',        // Keracunan (Poisoning)
+        'drowning',         // Tenggelam (Drowning)
+        'asphyxia',         // Afiksia (Asphyxia)
+        'other'             // Other (Lain-lain)
+    ];
+
+    // Constants for valid field values for local status
+    private const VALID_LOCAL_STATUS_RANGE = [
+        '00-09',            // 00-09
+        '10-19',            // 10-19
+        '20-29',            // 20-29
+        '30-39',            // 30-39
+        '40-49',            // 40-49
+        '50-59',            // 50-59
+        '60-69',            // 60-69
+        '70-79',            // 70-79
+        '80-89',            // 80-89
+        '90-99'             // 90-99
+    ];
+    private const VALID_LOCAL_STATUS_COLORS = [
+        'green',            // Hijau (Green)
+        'yellow',           // Kuning (Yellow)
+        'red',              // Merah (Red)
+        'black',            // Hitam (Black)
+        'white',            // Putih (White)
+        'blue',             // Biru (Blue)
+        'orange',           // Oranye (Orange)
+        'other'             // Lain-lain (Other)
+    ];
+
+    // Constants for valid field values for condition status
+    private const VALID_CONDITION_COLORS = [
+        'P1',               // P1
+        'P2',               // P2
+        'P3',               // P3
+        'P4',               // P4
+    ];
+
+    // Constants for valid field values for initial examination
+    private const VALID_PUPIL_STATUS = [
+        'isokor',           // Isokor
+        'anisokor',         // Anisokor
+        'miotic',           // Miotik
+        'mydriatic',        // Midriatik
+        'other'             // Lain-lain (Other)
+    ];
+    private const VALID_AIRWAY_CSPINE = [
+        'clear',            // Jernih (Bersih)
+        'sputum',           // Sputum (Slem Sumbatan)
+        'partial',          // Parsial (Partial)
+        'total',            // Total (Sumbatan Total)
+        'other'             // Lain-lain (Other)
+    ];
+    private const VALID_BREATHING_STATUS = [
+        'normal',               // Normal
+        'wheezing',             // Wheezing
+        'ronchi',               // Ronchi
+        'retraction',           // Retraksi
+        'nasal-flaring',        // Nasal Flaring
+        'abnormal-position',    // Posisi Abnormal
+    ];
+    private const VALID_CIRCULATION_STATUS = [
+        'pallor',               // Pucat (Pallor)
+        'mottling',             // Motling
+        'cyanosis',             // Sianosis (Cyanosis)
+        'capillary-refill',     // Capillary Refill
+    ];
+    private const VALID_GCS_DISABILITY_STATUS = [
+        'eye-movement',         // Gerakan Mata (Eye Movement)
+        'motor-reflex',         // Reflek Motorik (Motor Reflex)
+        'verbal'                // Verbal
+    ];
+    private const VALID_EXPOSURE_STATUS = [
+        'bleeding',             // Pendarahan (Bleeding)
+        'fracture',             // Fraktur (Fracture)
+        'paralysis',            // Parase (Paralysis)
+        'plegia',               // Plegi (Plegia)
+        'paraparesis'           // Paraperesis
+    ];
+    private const VALID_PREHOSPITAL_STATUS = [
+        'rjp',                  // RJP (Resusitasi Jantung Paru)
+        'intubasi',             // Intubasi
+        'oksigen',              // Oksigen
+        'ecollar',              // Ecollar
+        'balut',                // Balut/Bi
+        'obat'                  // Obat
+    ];
+
 
     /**
      * Get all patients with optional filtering and pagination
@@ -411,4 +583,39 @@ class Patient extends Model
     public function getEducation(): string { return $this->education; }
     public function getMaritalStatus(): string { return $this->maritalStatus; }
     public function getStatus(): string { return $this->status; }
+    public function getIsReferenced(): bool { return $this->isReferenced; }
+    public function getReferralSource(): string { return $this->referralSource; }
+    public function getDisasterType(): string { return $this->disasterType; }
+    public function getInjuryType(): string { return $this->injuryType; }
+    public function getLocalStatusRange(): string { return $this->localStatusRange; }
+    public function getLocalStatusColor(): string { return $this->localStatusColor; }
+    public function getAllergies(): string { return $this->allergies; }
+    public function getDiscoveryTimestamp(): string { return $this->discoveryTimestamp; }
+    public function getDiscoveryLocation(): string { return $this->discoveryLocation; }
+    public function getVitalSignBloodPressure(): string { return $this->vitalSignBloodPressure; }
+    public function getVitalSignPulse(): int { return $this->vitalSignPulse; }
+    public function getVitalSignRespiratoryRate(): int { return $this->vitalSignRespiratoryRate; }
+    public function getVitalSignTemperature(): float { return $this->vitalSignTemperature; }
+    public function getConditionColor(): string { return $this->conditionColor; }
+    public function getPupilStatus(): string { return $this->pupilStatus; }
+    public function getLightReflexLeft(): bool { return $this->lightReflexLeft; }
+    public function getLightReflexRight(): bool { return $this->lightReflexRight; }
+    public function getAirwayCSpine(): string { return $this->airwayCSpine; }
+    public function getBreathingStatus(): string { return $this->breathingStatus; }
+    public function getCirculationStatus(): string { return $this->circulationStatus; }
+    public function getGcsDisabilityStatus(): string { return $this->gcsDisabilityStatus; }
+    public function getExposureStatus(): string { return $this->exposureStatus; }
+    public function getPrehospitalStatus(): string { return $this->prehospitalStatus; }
+    public function getAnamnesis(): string { return $this->anamnesis; }
+    public function getDiagnosis(): string { return $this->diagnosis; }
+    public function getTherapy(): string { return $this->therapy; }
+    public function getActionsTaken(): string { return $this->actionsTaken; }
+    public function getFinderFullName(): string { return $this->finderFullName; }
+    public function getFinderAge(): int { return $this->finderAge; }
+    public function getFinderGender(): string { return $this->finderGender; }
+    public function getFinderAddress(): string { return $this->finderAddress; }
+    public function getFinderPhoneNumber(): string { return $this->finderPhoneNumber; }
+    public function getConfirmationDatetime(): string { return $this->confirmationDatetime; }
+    public function getConfirmationIssue(): string { return $this->confirmationIssue; }
+    public function getConfirmationTherapy(): string { return $this->confirmationTherapy; }
 }
