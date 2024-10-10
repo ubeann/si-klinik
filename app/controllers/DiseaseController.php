@@ -38,8 +38,24 @@ class DiseaseController extends Controller
      */
     public function index(): void
     {
+        // Initialize an instance of the Disease model
+        $disease = new Disease();
+
+        // Get pagination page number from the query string
+        $page = $_GET['page'] ?? 1;
+
+        // Load all diseases from the database
+        $diseases = $disease->getAllDisease(
+            page: $page
+        );
+
+        // Generate the pagination links
+        $pagination = $disease->getPaginationLinks(
+            page: $page
+        );
+
         // Render the disease list view (located in the 'views/disease/index.php' file).
-        $this->view('disease/index');
+        $this->view('disease/index', compact('diseases', 'pagination'));
     }
 
     /**
@@ -99,7 +115,7 @@ class DiseaseController extends Controller
         // Create a success message
         $_SESSION['success'] = 'The disease has been registered successfully.';
 
-        // Redirect to the patient list page
+        // Redirect to the disease list page
         header('Location: '. '/disease');
         exit;
     }

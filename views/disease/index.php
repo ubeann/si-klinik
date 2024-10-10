@@ -72,35 +72,63 @@ use function App\Helpers\route;
                     <th style="text-align: center;">Aksi</th>
                 </tr>
             </thead>
-            <!-- <tbody>
-                <?php foreach ($epidemiologis as $epidemiologi) : ?>
+            <tbody>
+                <?php foreach ($diseases as $disease) : ?>
                     <tr>
-                        <td><?= $epidemiologi['full_name'] ?></td>
-                        <td><?= $epidemiologi['national_id_number'] ?></td>
-                        <td><?= $epidemiologi['age'] ?></td>
-                        <td><?= $epidemiologi['gender'] === 'l' ? 'Laki-laki' : 'Perempuan' ?></td>
-                        <td><?= $epidemiologi['address'] ?></td>
-                        <td><?= $epidemiologi['diagnosis'] ?></td>
-                        <td><?= date('d M Y', strtotime($epidemiologi['diagnosis_date'])) ?></td>
+                        <td><?= $disease['name'] ?></td>
+                        <td><?= $disease['code'] ?></td>
+                        <td>
+                            <?php if ($disease['category'] === 'natural-disaster') : ?>
+                                Bencana Alam
+                            <?php elseif ($disease['category'] === 'epidemic') : ?>
+                                Epidemi
+                            <?php elseif ($disease['category'] === 'disease') : ?>
+                                Penyakit
+                            <?php endif; ?>
+                        </td>
+                        <td><?= $disease['description'] ?></td>
+                        <td>
+                            <?php if ($disease['severity_level'] === 'low') : ?>
+                                Rendah
+                            <?php elseif ($disease['severity_level'] === 'medium') : ?>
+                                Sedang
+                            <?php elseif ($disease['severity_level'] === 'high') : ?>
+                                Tinggi
+                            <?php elseif ($disease['severity_level'] === 'very-high') : ?>
+                                Sangat Tinggi
+                            <?php endif; ?>
+                        </td>
+                        <td><?= $disease['affected_region'] ?></td>
+                        <td><?= $disease['incident_date'] ?></td>
+                        <td><?= number_format($disease['victim_count']) ?></td>
+                        <td>
+                            <?php if ($disease['status'] === 'active') : ?>
+                                Aktif
+                            <?php elseif ($disease['status'] === 'inactive') : ?>
+                                Tidak Aktif
+                            <?php endif; ?>
+                        </td>
+                        <td><?= $disease['history'] ?></td>
+                        <td><?= $disease['contact_information'] ?></td>
                         <td style="text-align: center;">
-                            <a href="<?= route('epidemiologi/form-edit?id=' . $epidemiologi['id']) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
-                            <a href="<?= route('epidemiologi/delete?id=' . $epidemiologi['id']) ?>" class="delete-button" onclick="return confirm('Anda yakin ingin menghapus data ini?')"><i class="fas fa-trash-alt"></i></a>
+                            <a href="<?= route('disease/form-edit?id=' . $disease['id']) ?>" class="edit-button"><i class="fas fa-edit"></i></a>
+                            <a href="<?= route('disease/delete?id=' . $disease['id']) ?>" class="delete-button" onclick="return confirm('Anda yakin ingin menghapus data ini?')"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
-                <?php if (empty($epidemiologis)) : ?>
+                <?php if (empty($diseases)) : ?>
                     <tr>
-                        <td colspan="8">No records found, please input a new patient first</td>
+                        <td colspan="12">No records found, please input a new disease first</td>
                     </tr>
                 <?php endif; ?>
-            </tbody> -->
+            </tbody>
         </table>
 
-        <!-- <div class="pagination">
+        <div class="pagination">
             <?php foreach ($pagination as $link) : ?>
                 <a href="<?= $link['url'] ?>"><?= $link['page'] ?></a>
             <?php endforeach; ?>
-        </div> -->
+        </div>
     </div>
 
     <!-- Clear session -->

@@ -36,7 +36,7 @@ class Disease extends Model
     public function getAllDiseaseRecord(): array
     {
         // SQL query to retrieve all disease records
-        $sql = "SELECT * FROM {$this->table} ORDER BY full_name ASC";
+        $sql = "SELECT * FROM {$this->table} ORDER BY incident_date DESC";
 
         // Execute the query
         $stmt = $this->query($sql);
@@ -80,7 +80,7 @@ class Disease extends Model
         // SQL query to retrieve the diseases with optional filters and pagination
         $sql = "SELECT * FROM {$this->table}
                 {$whereClause}
-                ORDER BY full_name ASC
+                ORDER BY incident_date DESC
                 LIMIT :limit OFFSET :offset";
 
         // Execute the query with the provided parameters
@@ -114,9 +114,9 @@ class Disease extends Model
 
         // Filter by search query if provided
         if (!empty($filters['search'])) {
-            $conditions[] = "(full_name LIKE :name OR national_id_number LIKE :number)";
+            $conditions[] = "(name LIKE :name OR code LIKE :code)";
             $params[':name'] = "%{$filters['search']}%";
-            $params[':number'] = "%{$filters['search']}%";
+            $params[':code'] = "%{$filters['search']}%";
         }
 
         // Build the WHERE clause if conditions are set
