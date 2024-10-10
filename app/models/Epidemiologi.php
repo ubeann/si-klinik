@@ -23,6 +23,23 @@ class Epidemiologi extends Model
     private const VALID_GENDERS = ['l', 'p'];
 
     /**
+     * Get all epidemiologi without filtering
+     *
+     * @return array An array of epidemiologi
+     */
+    public function getAllEpidemiologiRecord(): array
+    {
+        // SQL query to retrieve all epidemiologi records
+        $sql = "SELECT * FROM {$this->table} ORDER BY full_name ASC";
+
+        // Execute the query
+        $stmt = $this->query($sql);
+
+        // Fetch and return all epidemiologi records
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Get all epidemiologi with optional filtering and pagination
      *
      * @param array $filters Optional filters (status, search)

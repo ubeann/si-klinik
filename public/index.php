@@ -59,6 +59,7 @@ $router->addRoute('/epidemiologi/register', EpidemiologiController::class, 'regi
 $router->addRoute('/epidemiologi/form-edit', EpidemiologiController::class, 'editForm');
 $router->addRoute('/epidemiologi/edit', EpidemiologiController::class, 'edit');
 $router->addRoute('/epidemiologi/delete', EpidemiologiController::class, 'delete');
+$router->addRoute('/epidemiologi/download/csv', EpidemiologiController::class, 'downloadCSV');
 
 // Users routes
 $router->addRoute('/users', UserController::class, 'index');

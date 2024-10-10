@@ -213,4 +213,49 @@ class EpidemiologiController extends Controller
         // Redirect to the epidemiologi list page
         header('Location: '. '/epidemiologi');
     }
+
+    /**
+     * Donwload a epidemiologi record to CSV.
+     *
+     * This method handles the "downloadCSV" action for the epidemiologi page.
+     * It downloads all epidemiologi records to CSV file.
+     *
+     * @return void
+     */
+    public function downloadCSV(): void {
+        // Initialize an instance of the Epidemiologi model
+        $epidemiologi = new Epidemiologi();
+
+        // Get all records from the database
+        $epidemiologi = $epidemiologi->getAllEpidemiologiRecord();
+
+        // Set the HTTP header to force download the CSV file
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="epidemiologi.csv"');
+
+        // Open a file pointer connected to the output stream
+        $fp = fopen('php://output', 'w');
+
+        // Write the CSV header row
+        fputcsv($fp, ['Nama Pasien', 'No. Identitas', 'Umur', 'Jenis Kelamin', 'Alamat', 'Diagnosis', 'Tanggal Diagnosis']);
+
+        // Write the CSV data row
+        foreach ($epidemiologi as $row) {
+            fputcsv($fp, [
+                $row['full_name'],
+                $row['national_id_number'],
+                $row['age'],
+                $row['gender'] === 'l' ? 'Laki-laki' : 'Perempuan',
+                $row['address'],
+                $row['diagnosis'],
+                $row['diagnosis_date']
+            ]);
+        }
+
+        // Close the file pointer
+        fclose($fp);
+
+        // Exit the script
+        exit;
+    }
 }

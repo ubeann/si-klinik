@@ -57,8 +57,7 @@ use function App\Helpers\route;
 
         <div style="display: flex; justify-content: space-between;">
             <div style="display: flex; gap: 10px;">
-                <a class="btn-download" target="_blank">Ekspor ke CSV</a>
-                <a class="btn-download" target="_blank">Ekspor ke XLSX</a>
+                <a class="btn-download" href="<?= route('epidemiologi/download/csv') ?>" target="_blank">Ekspor ke CSV</a>
             </div>
             <a class="btn-create" href="<?= route('epidemiologi/form-register') ?>">Tambahkan Data Pasien</a>
         </div>
