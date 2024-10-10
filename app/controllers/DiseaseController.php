@@ -213,4 +213,71 @@ class DiseaseController extends Controller
         // Redirect to the disease list page
         header('Location: '. '/disease');
     }
+
+    /**
+     * Donwload a disease record to CSV.
+     *
+     * This method handles the "downloadCSV" action for the disease page.
+     * It downloads all disease records to CSV file.
+     *
+     * @return void
+     */
+    public function downloadCSV(): void {
+        // Initialize an instance of the Disease model
+        $disease = new Disease();
+
+        // Get all records from the database
+        $diseases = $disease->getAllDiseaseRecord();
+
+        // Set the HTTP header to force download the CSV file
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="disease.csv"');
+
+        // Open a file pointer connected to the output stream
+        $fp = fopen('php://output', 'w');
+
+        // Write the CSV header row
+        fputcsv($fp, ['Nama', 'Kode', 'Kategori', 'Deskripsi', 'Tingkat Keparahan', 'Wilayah Terdampak', 'Tanggal Kejadian', 'Jumlah Korban', 'Status', 'Sejarah', 'Kontak']);
+
+        // Write the CSV data row
+        foreach ($diseases as $row) {
+            // Calculate the category value
+            $category = match ($row['category']) {
+                'natural-disaster' => 'Bencana Alam',
+                'epidemic' => 'Epidemi',
+                'disease' => 'Penyakit',
+                default => '-'
+            };
+
+            // Calculate the severity level value
+            $severityLevel = match ($row['severity_level']) {
+                'low' => 'Rendah',
+                'medium' => 'Sedang',
+                'high' => 'Tinggi',
+                'very-high' => 'Sangat Tinggi',
+                default => '-'
+            };
+
+            // Write the CSV row
+            fputcsv($fp, [
+                $row['name'],
+                $row['code'],
+                $category,
+                $row['description'],
+                $severityLevel,
+                $row['affected_region'],
+                $row['incident_date'],
+                $row['victim_count'],
+                $row['status'] === 'active' ? 'Aktif' : 'Tidak Aktif',
+                $row['history'],
+                $row['contact_information']
+            ]);
+        }
+
+        // Close the file pointer
+        fclose($fp);
+
+        // Exit the script
+        exit;
+    }
 }
