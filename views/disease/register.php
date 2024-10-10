@@ -46,24 +46,6 @@ use function App\Helpers\route;
         <?php endif ?>
 
         <form method="POST" action="<?= route('disease/register') ?>">
-            <!-- // Disease properties
-            private string $name = '';
-            private string $code = '';
-            private string $category = '';
-            private string $description = '';
-            private string $severity_level = '';
-            private string $affected_region = '';
-            private string $incident_date = '';
-            private int $victim_count = 0;
-            private string $status = '';
-            private string $history = '';
-            private string $contact_information = '';
-
-            // Constants for valid field values
-            private const VALID_CATEGORIES = ['natural-disaster', 'epidemic', 'disease'];
-            private const VALID_SEVERITY_LEVELS = ['low', 'medium', 'high', 'very-high'];
-            private const VALID_STATUSES = ['active', 'inactive']; -->
-
             <label for="name">Nama Penyakit/Bencana:</label>
             <input required type="text" id="name" name="name" placeholder="Nama Penyakit/Bencana" style="margin-bottom: 16px;">
 

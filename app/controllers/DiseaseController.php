@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\Controller;
+use App\Models\Disease;
 
 class DiseaseController extends Controller
 {
@@ -55,5 +56,51 @@ class DiseaseController extends Controller
     {
         // Render the disease registration form view (located in the 'views/disease/register.php' file).
         $this->view('disease/register');
+    }
+
+    /**
+     * Register a new disease.
+     *
+     * This method handles the "register" action for the disease registration form.
+     * It processes the form submission, validates the input data, and saves the
+     * new disease record to the database.
+     *
+     * @return void
+     */
+    public function register(): void
+    {
+        // Redirect to the form registration page when the method is not POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: '. '/disease/form-register');
+            exit;
+        }
+
+        // Initialize an instance of the Disease model
+        $disease = new Disease();
+
+        // Set properties of the disease object
+        $disease->setProperties($_POST);
+
+        // Validate the form data
+        $errors = $disease->validate($_POST);
+
+        // When there are validation errors, store the errors in the session
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+
+            // Redirect back to the disease registration form
+            header('Location: '. '/disease/form-register');
+            exit;
+        }
+
+        // Save the disease record to the database
+        $disease->create();
+
+        // Create a success message
+        $_SESSION['success'] = 'The disease has been registered successfully.';
+
+        // Redirect to the patient list page
+        header('Location: '. '/disease');
+        exit;
     }
 }

@@ -205,9 +205,9 @@ class Disease extends Model
         if (empty($this->incident_date)) {
             $errors['incident_date'] = 'Please enter the incident date';
         } else {
-            $date = DateTime::createFromFormat('Y-m-d', $this->incident_date);
+            $date = DateTime::createFromFormat('Y-m-d\TH:i', $this->incident_date);
             if (!$date) {
-                $errors['incident_date'] = 'Please enter a valid date in the format YYYY-MM-DD';
+                $errors['incident_date'] = 'Please enter a valid date in the format YYYY-MM-DDTHH:MM';
             }
         }
 
