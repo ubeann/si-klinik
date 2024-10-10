@@ -85,3 +85,19 @@ textarea {
 .btn-create:hover {
     background-color: #1e87dc;
 }
+
+.errors {
+    color: red;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #f2dede;
+}
+
+.success {
+    color: green;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #d4edda;
+}

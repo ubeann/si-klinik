@@ -14,9 +14,19 @@ use function App\Helpers\route;
 </head>
 
 <body>
-
     <div class="container">
         <h1>Epidemiologi Input Data Pasien Satuan</h1>
+
+        <?php if (isset($_SESSION['errors'])) : ?>
+        <div class="errors">
+                <ol>
+                    <?php foreach ($_SESSION['errors'] as $error) : ?>
+                        <li><?= $error ?></li>
+                    <?php endforeach ?>
+                </ol>
+        </div>
+        <?php endif ?>
+
         <form method="POST" action="<?= route('epidemiologi/register') ?>">
             <label for="full_name">Nama Pasien:</label>
             <input required type="text" id="full_name" name="full_name" placeholder="Masukkan nama pasien" style="margin-bottom: 16px;">
@@ -40,13 +50,16 @@ use function App\Helpers\route;
             <textarea required name="diagnosis" id="diagnosis" placeholder="Diagnosis penyakit pasien" style="margin-bottom: 16px;"></textarea>
 
             <label for="diagnosis_date">Tanggal Diagnosis:</label>
-            <input required type="date" id="diagnosis_date">
+            <input required type="date" id="diagnosis_date" name="diagnosis_date">
 
             <div style="display: flex; justify-content: right; margin-top: 20px;">
                 <button class="btn-download" type="submit">Tambahkan Data Pasien</button>
             </div>
         </form>
     </div>
+
+    <!-- Clear session -->
+    <?php unset($_SESSION['errors']) ?>
 </body>
 
 </html>
