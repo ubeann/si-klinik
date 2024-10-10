@@ -60,8 +60,8 @@ use function App\Helpers\route;
                     <label for="is_referenced">Rujukan</label>
                     <select required name="is_referenced" id="is_referenced" style="border-color: <?= isset($_SESSION['errors']['referral']['is_referenced']) ? 'red' : '' ?>">
                         <option disabled selected value="">-- Pilih Rujukan --</option>
-                        <option value="1" <?= $patient->getIsReferenced() === '1' ? 'selected' : '' ?>>Ya</option>
-                        <option value="0" <?= $patient->getIsReferenced() === '0' ? 'selected' : '' ?>>Tidak</option>
+                        <option value="1" <?= $patient->getIsReferenced() ? 'selected' : '' ?>>Ya</option>
+                        <option value="0" <?= $patient->getIsReferenced() ? 'selected' : '' ?>>Tidak</option>
                     </select>
                 </div>
                 <div class="row">
@@ -175,7 +175,7 @@ use function App\Helpers\route;
                 </div>
                 <div class="row">
                     <label for="alergies">Alergi</label>
-                    <textarea required name="alergies" id="alergies" placeholder="Tulis alergi pasien (seperti obat, makanan, dll)" style="margin-bottom: 16px;border-color: <?= isset($_SESSION['errors']['medical']['allergies']) ? 'red' : '' ?>"><?= $patient->getAllergies() ?></textarea>
+                    <textarea required name="alergies" id="alergies" placeholder="Tulis alergi pasien (seperti obat, makanan, dll)" style="margin-bottom: 16px;border-color: <?= isset($_SESSION['errors']['medical']['alergies']) ? 'red' : '' ?>"><?= $patient->getAlergies() ?></textarea>
                 </div>
             </div>
 
@@ -260,10 +260,10 @@ use function App\Helpers\route;
                     <label for="condition_color">Kondisi</label>
                     <select required name="condition_color" id="condition_color" style="border-color: <?= isset($_SESSION['errors']['patient']['condition_color']) ? 'red' : '' ?>">
                         <option disabled selected value="">-- Pilih Kondisi --</option>
-                        <option value="P1" <?= $patient->getConditionColor() === 'P1' ? 'selected' : '' ?>>P1 (Gawat dan Darurat)</option>
-                        <option value="P2" <?= $patient->getConditionColor() === 'P2' ? 'selected' : '' ?>>P2 (Gawat dan Tidak Darurat)</option>
-                        <option value="P3" <?= $patient->getConditionColor() === 'P3' ? 'selected' : '' ?>>P3 (Tidak Gawat dan Tidak Darurat)</option>
-                        <option value="P4" <?= $patient->getConditionColor() === 'P4' ? 'selected' : '' ?>>P4 (Meninggal)</option>
+                        <option value="P1" <?= $patient->getConditionColor() === 'p1' ? 'selected' : '' ?>>P1 (Gawat dan Darurat)</option>
+                        <option value="P2" <?= $patient->getConditionColor() === 'p2' ? 'selected' : '' ?>>P2 (Gawat dan Tidak Darurat)</option>
+                        <option value="P3" <?= $patient->getConditionColor() === 'p3' ? 'selected' : '' ?>>P3 (Tidak Gawat dan Tidak Darurat)</option>
+                        <option value="P4" <?= $patient->getConditionColor() === 'p4' ? 'selected' : '' ?>>P4 (Meninggal)</option>
                     </select>
                 </div>
             </div>

@@ -139,8 +139,8 @@ class ResumeController extends Controller
             exit;
         }
 
-        // TODO: Update the patient record in the database
-        $patient->update($_GET['id']);
+        // Update the patient record with the submitted resume data
+        $patient->updateResume($_GET['id']);
 
         // Create a success message
         $_SESSION['success'] = 'Resume data has been successfully saved.';

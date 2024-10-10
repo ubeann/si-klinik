@@ -37,7 +37,7 @@ class Patient extends Model
     // Local status attributes
     private string $localStatusRange = '';
     private string $localStatusColor = '';
-    private string $allergies = '';
+    private string $alergies = '';
 
     // Discovery details attributes
     private string $discoveryTimestamp = '';
@@ -148,10 +148,10 @@ class Patient extends Model
 
     // Constants for valid field values for condition status
     private const VALID_CONDITION_COLORS = [
-        'P1',               // P1 (Gawat dan Darurat)
-        'P2',               // P2 (Gawat dan Tidak Darurat)
-        'P3',               // P3 (Tidak Gawat dan Tidak Darurat)
-        'P4',               // P4 (Meninggal)
+        'p1',               // P1 (Gawat dan Darurat)
+        'p2',               // P2 (Gawat dan Tidak Darurat)
+        'p3',               // P3 (Tidak Gawat dan Tidak Darurat)
+        'p4',               // P4 (Meninggal)
     ];
 
     // Constants for valid field values for initial examination
@@ -344,7 +344,7 @@ class Patient extends Model
         $this->injuryType = strtolower($this->sanitizeString($data['injury_type'] ?? ''));
         $this->localStatusRange = strtolower($this->sanitizeString($data['local_status_range'] ?? ''));
         $this->localStatusColor = strtolower($this->sanitizeString($data['local_status_color'] ?? ''));
-        $this->allergies = $this->sanitizeString($data['allergies'] ?? '');
+        $this->alergies = $this->sanitizeString($data['alergies'] ?? '');
         $this->discoveryTimestamp = $data['discovery_timestamp'] ?? '';
         $this->discoveryLocation = $this->sanitizeString($data['discovery_location'] ?? '');
         $this->vitalSignBloodPressure = $this->sanitizeString($data['vital_sign_blood_pressure'] ?? '');
@@ -355,7 +355,7 @@ class Patient extends Model
         $this->pupilStatus = strtolower($this->sanitizeString($data['pupil_status'] ?? ''));
         $this->lightReflexLeft = (float) ($data['light_reflex_left'] ?? 0.0);
         $this->lightReflexRight = (float) ($data['light_reflex_right'] ?? 0.0);
-        $this->airwayCSpine = strtolower($this->sanitizeString($data['airway_cspine'] ?? ''));
+        $this->airwayCSpine = strtolower($this->sanitizeString($data['airway_c_spine'] ?? ''));
         $this->breathingStatus = strtolower($this->sanitizeString($data['breathing_status'] ?? ''));
         $this->circulationStatus = strtolower($this->sanitizeString($data['circulation_status'] ?? ''));
         $this->gcsDisabilityStatus = strtolower($this->sanitizeString($data['gcs_disability_status'] ?? ''));
@@ -484,8 +484,8 @@ class Patient extends Model
         if (!in_array($this->localStatusColor, self::VALID_LOCAL_STATUS_COLORS, true)) {
             $errors['medical']['local_status_color'] = 'Warna lokal status tidak valid, silahkan pilih opsi yang tersedia.';
         }
-        if (empty($this->allergies)) {
-            $errors['medical']['allergies'] = "Alergi tidak boleh kosong, silahkan isi dengan informasi yang sesuai atau '-' jika tidak ada.";
+        if (empty($this->alergies)) {
+            $errors['medical']['alergies'] = "Alergi tidak boleh kosong, silahkan isi dengan informasi yang sesuai atau '-' jika tidak ada.";
         }
 
         // Validate discovery details
@@ -678,11 +678,13 @@ class Patient extends Model
      */
     public function update(int $id): bool
     {
+        // Validate the data before proceeding
         $errors = $this->validate();
         if (!empty($errors)) {
             throw new InvalidArgumentException(json_encode($errors));
         }
 
+        // SQL query to update the patient data
         $sql = "UPDATE {$this->table} SET
             medical_record_number = :mrn,
             registration_date = :reg_date,
@@ -700,6 +702,7 @@ class Patient extends Model
             status = :status
             WHERE id = :id";
 
+        // Execute the query with the patient data
         $stmt = $this->query($sql, [
             'mrn' => $this->medicalRecordNumber,
             'reg_date' => $this->registrationDate,
@@ -718,6 +721,105 @@ class Patient extends Model
             'id' => $id
         ]);
 
+        // Return true if the update was successful
+        return $stmt->rowCount() > 0;
+    }
+
+    /**
+     * Update an resume existing patient record in the database
+     *
+     * @param int $id The ID of the patient to update
+     * @return bool True if the update was successful, false otherwise
+     */
+    public function updateResume(int $id): bool
+    {
+        // Validate the data before proceeding
+        $errors = $this->validateResume();
+        if (!empty($errors)) {
+            throw new InvalidArgumentException(json_encode($errors));
+        }
+
+        // SQL query to update the patient resume data
+        $sql = "UPDATE {$this->table} SET
+            is_referenced = :is_referenced,
+            referral_source = :referral_source,
+            disaster_type = :disaster_type,
+            injury_type = :injury_type,
+            local_status_range = :local_status_range,
+            local_status_color = :local_status_color,
+            alergies = :alergies,
+            discovery_timestamp = :discovery_timestamp,
+            discovery_location = :discovery_location,
+            vital_sign_blood_pressure = :vital_sign_blood_pressure,
+            vital_sign_pulse = :vital_sign_pulse,
+            vital_sign_respiratory_rate = :vital_sign_respiratory_rate,
+            vital_sign_temperature = :vital_sign_temperature,
+            condition_color = :condition_color,
+            pupil_status = :pupil_status,
+            light_reflex_left = :light_reflex_left,
+            light_reflex_right = :light_reflex_right,
+            airway_c_spine = :airway_c_spine,
+            breathing_status = :breathing_status,
+            circulation_status = :circulation_status,
+            gcs_disability_status = :gcs_disability_status,
+            exposure_status = :exposure_status,
+            prehospital_status = :prehospital_status,
+            anamnesis = :anamnesis,
+            diagnosis = :diagnosis,
+            therapy = :therapy,
+            actions_taken = :actions_taken,
+            finder_full_name = :finder_full_name,
+            finder_age = :finder_age,
+            finder_gender = :finder_gender,
+            finder_address = :finder_address,
+            finder_phone_number = :finder_phone_number,
+            confirmation_datetime = :confirmation_datetime,
+            confirmation_issue = :confirmation_issue,
+            confirmation_therapy = :confirmation_therapy,
+            status = 'filled'
+            WHERE id = :id";
+
+        // Execute the query with the patient resume data
+        $stmt = $this->query($sql, [
+            'is_referenced' => $this->isReferenced,
+            'referral_source' => $this->referralSource,
+            'disaster_type' => $this->disasterType,
+            'injury_type' => $this->injuryType,
+            'local_status_range' => $this->localStatusRange,
+            'local_status_color' => $this->localStatusColor,
+            'alergies' => $this->alergies,
+            'discovery_timestamp' => $this->discoveryTimestamp,
+            'discovery_location' => $this->discoveryLocation,
+            'vital_sign_blood_pressure' => $this->vitalSignBloodPressure,
+            'vital_sign_pulse' => $this->vitalSignPulse,
+            'vital_sign_respiratory_rate' => $this->vitalSignRespiratoryRate,
+            'vital_sign_temperature' => $this->vitalSignTemperature,
+            'condition_color' => $this->conditionColor,
+            'pupil_status' => $this->pupilStatus,
+            'light_reflex_left' => $this->lightReflexLeft,
+            'light_reflex_right' => $this->lightReflexRight,
+            'airway_c_spine' => $this->airwayCSpine,
+            'breathing_status' => $this->breathingStatus,
+            'circulation_status' => $this->circulationStatus,
+            'gcs_disability_status' => $this->gcsDisabilityStatus,
+            'exposure_status' => $this->exposureStatus,
+            'prehospital_status' => $this->prehospitalStatus,
+            'anamnesis' => $this->anamnesis,
+            'diagnosis' => $this->diagnosis,
+            'therapy' => $this->therapy,
+            'actions_taken' => $this->actionsTaken,
+            'finder_full_name' => $this->finderFullName,
+            'finder_age' => $this->finderAge,
+            'finder_gender' => $this->finderGender,
+            'finder_address' => $this->finderAddress,
+            'finder_phone_number' => $this->finderPhoneNumber,
+            'confirmation_datetime' => $this->confirmationDatetime,
+            'confirmation_issue' => $this->confirmationIssue,
+            'confirmation_therapy' => $this->confirmationTherapy,
+            'id' => $id
+        ]);
+
+        // Return true if the update was successful
         return $stmt->rowCount() > 0;
     }
 
@@ -795,7 +897,7 @@ class Patient extends Model
     public function getInjuryType(): string { return $this->injuryType; }
     public function getLocalStatusRange(): string { return $this->localStatusRange; }
     public function getLocalStatusColor(): string { return $this->localStatusColor; }
-    public function getAllergies(): string { return $this->allergies; }
+    public function getAlergies(): string { return $this->alergies; }
     public function getDiscoveryTimestamp(): string { return $this->discoveryTimestamp; }
     public function getDiscoveryLocation(): string { return $this->discoveryLocation; }
     public function getVitalSignBloodPressure(): string { return $this->vitalSignBloodPressure; }
