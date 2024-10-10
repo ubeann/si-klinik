@@ -187,4 +187,30 @@ class EpidemiologiController extends Controller
         header('Location: '. '/epidemiologi');
         exit;
     }
+
+    /**
+     * Delete a epidemiologi record.
+     *
+     * This method handles the "delete" action for the epidemiologi page.
+     * It deletes the epidemiologi record with the specified ID from the database.
+     *
+     * @return void
+     */
+    public function delete(): void {
+        // Initialize an instance of the Epidemiologi model
+        $epidemiologi = new Epidemiologi();
+
+        // Delete the epidemiologi record
+        $success = $epidemiologi->delete($_GET['id']);
+
+        // Create a success message
+        if ($success) {
+            $_SESSION['success'] = 'Epidemiologi data has been successfully deleted.';
+        } else {
+            $_SESSION['errors']['delete'] = 'Failed to delete epidemiologi data.';
+        }
+
+        // Redirect to the epidemiologi list page
+        header('Location: '. '/epidemiologi');
+    }
 }
