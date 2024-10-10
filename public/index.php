@@ -51,6 +51,12 @@ $router->addRoute('/resume/save', ResumeController::class, 'save');
 
 // Disease routes
 $router->addRoute('/disease', DiseaseController::class, 'index');
+$router->addRoute('/disease/form-register', DiseaseController::class, 'registerForm');
+$router->addRoute('/disease/register', DiseaseController::class, 'register');
+$router->addRoute('/disease/form-edit', DiseaseController::class, 'editForm');
+$router->addRoute('/disease/edit', DiseaseController::class, 'edit');
+$router->addRoute('/disease/delete', DiseaseController::class, 'delete');
+$router->addRoute('/disease/download/csv', DiseaseController::class, 'downloadCSV');
 
 // Epidemiologi routes
 $router->addRoute('/epidemiologi', EpidemiologiController::class, 'index');

@@ -40,4 +40,20 @@ class DiseaseController extends Controller
         // Render the disease list view (located in the 'views/disease/index.php' file).
         $this->view('disease/index');
     }
+
+    /**
+     * Display the disease registration form.
+     *
+     * This method handles the "register" action for the disease registration page.
+     * It calls the `view` method (inherited from the base Controller class) to load
+     * the corresponding view file (`disease/register.php`). Additional data can
+     * be passed to the view if needed.
+     *
+     * @return void
+     */
+    public function registerForm(): void
+    {
+        // Render the disease registration form view (located in the 'views/disease/register.php' file).
+        $this->view('disease/register');
+    }
 }
