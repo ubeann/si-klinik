@@ -187,4 +187,30 @@ class DiseaseController extends Controller
         header('Location: '. '/disease');
         exit;
     }
+
+    /**
+     * Delete a disease record.
+     *
+     * This method handles the "delete" action for the disease page.
+     * It deletes the disease record with the specified ID from the database.
+     *
+     * @return void
+     */
+    public function delete(): void {
+        // Initialize an instance of the Disease model
+        $disease = new Disease();
+
+        // Delete the disease record
+        $success = $disease->delete($_GET['id']);
+
+        // Create a success message
+        if ($success) {
+            $_SESSION['success'] = 'The disease has been deleted successfully.';
+        } else {
+            $_SESSION['errors']['delete'] = 'Failed to delete the disease.';
+        }
+
+        // Redirect to the disease list page
+        header('Location: '. '/disease');
+    }
 }
