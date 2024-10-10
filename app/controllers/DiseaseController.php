@@ -119,4 +119,72 @@ class DiseaseController extends Controller
         header('Location: '. '/disease');
         exit;
     }
+
+    /**
+     * Display the disease edit form.
+     *
+     * This method handles the "edit" action for the disease page.
+     * It retrieves the disease record with the specified ID from the database
+     * and displays the disease edit form.
+     *
+     * @return void
+     */
+    public function editForm(): void {
+        // Initialize an instance of the Disease model
+        $disease = new Disease();
+
+        // Get the disease record with the specified ID
+        $disease->load($_GET['id']);
+
+        // Render the disease edit form view (located in the 'views/disease/edit.php' file).
+        $this->view('disease/edit', ['disease' => $disease, 'id' => $_GET['id']]);
+    }
+
+    /**
+     * Update a disease record.
+     *
+     * This method handles the "edit" action for the disease edit form.
+     * It processes the form submission, validates the input data, and updates
+     * the disease record with the specified ID in the database.
+     *
+     * @return void
+     */
+    public function edit(): void {
+        // Redirect to the form registration page when the method is not POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: '. '/disease/form-edit?id=' . $_GET['id']);
+            exit;
+        }
+
+        // Initialize an instance of the Disease model
+        $disease = new Disease();
+
+        // Get the disease record with the specified ID
+        $disease->load($_GET['id']);
+
+        // Set properties of the disease object
+        $disease->setProperties($_POST);
+
+        // Validate the form data
+        $errors = $disease->validate($_POST);
+
+        // When there are validation errors, store the errors in the session
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+
+            // Redirect back to the disease edit form
+            header('Location: '. '/disease/form-edit?id=' . $_GET['id']);
+            exit;
+        }
+
+        // Update the disease record in the database
+        $disease->update($_GET['id']);
+
+        // Create a success message
+        $_SESSION['success'] = 'The disease has been updated successfully.';
+
+        // Redirect to the disease list page
+        header('Location: '. '/disease');
+        exit;
+    }
 }
