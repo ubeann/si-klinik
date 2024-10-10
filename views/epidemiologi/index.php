@@ -15,6 +15,24 @@ use function App\Helpers\route;
 </head>
 
 <body>
+    <header>
+        <nav>
+            <ul>
+                <li>
+                    <img src="<?= asset('assets/logo.png') ?>" alt="Klinik Logo">
+                </li>
+                <li>
+                    <a href="<?= route('dashboard') ?>">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="70" viewBox="0 0 30 20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
     <div class="container">
         <h1>Metadata Epidemiologi & Input Data Pasien Satuan</h1>
 
@@ -110,6 +128,12 @@ use function App\Helpers\route;
                 <?php endif; ?>
             </tbody>
         </table>
+
+        <div class="pagination">
+            <?php foreach ($pagination as $link) : ?>
+                <a href="<?= $link['url'] ?>"><?= $link['page'] ?></a>
+            <?php endforeach; ?>
+        </div>
     </div>
 
     <!-- Clear session -->
