@@ -54,8 +54,8 @@ class Patient extends Model
 
     // Initial examination attributes
     private string $pupilStatus = '';
-    private bool $lightReflexLeft = false;
-    private bool $lightReflexRight = false;
+    private float $lightReflexLeft = 0.0;
+    private float $lightReflexRight = 0.0;
     private string $airwayCSpine = '';
     private string $breathingStatus = '';
     private string $circulationStatus = '';
@@ -331,6 +331,51 @@ class Patient extends Model
     }
 
     /**
+     * Set patient resume properties from an array of data
+     *
+     * @param array $data Associative array of patient resume data
+     */
+    public function setResumeProperties(array $data): void
+    {
+        // Set each patient resume attribute after sanitizing the input data
+        $this->isReferenced = isset($data['is_referenced']);
+        $this->referralSource = strtolower($this->sanitizeString($data['referral_source'] ?? ''));
+        $this->disasterType = strtolower($this->sanitizeString($data['disaster_type'] ?? ''));
+        $this->injuryType = strtolower($this->sanitizeString($data['injury_type'] ?? ''));
+        $this->localStatusRange = strtolower($this->sanitizeString($data['local_status_range'] ?? ''));
+        $this->localStatusColor = strtolower($this->sanitizeString($data['local_status_color'] ?? ''));
+        $this->allergies = $this->sanitizeString($data['allergies'] ?? '');
+        $this->discoveryTimestamp = $data['discovery_timestamp'] ?? '';
+        $this->discoveryLocation = $this->sanitizeString($data['discovery_location'] ?? '');
+        $this->vitalSignBloodPressure = $this->sanitizeString($data['vital_sign_blood_pressure'] ?? '');
+        $this->vitalSignPulse = (int) ($data['vital_sign_pulse'] ?? 0);
+        $this->vitalSignRespiratoryRate = (int) ($data['vital_sign_respiratory_rate'] ?? 0);
+        $this->vitalSignTemperature = (float) ($data['vital_sign_temperature'] ?? 0.0);
+        $this->conditionColor = strtolower($this->sanitizeString($data['condition_color'] ?? ''));
+        $this->pupilStatus = strtolower($this->sanitizeString($data['pupil_status'] ?? ''));
+        $this->lightReflexLeft = (float) ($data['light_reflex_left'] ?? 0.0);
+        $this->lightReflexRight = (float) ($data['light_reflex_right'] ?? 0.0);
+        $this->airwayCSpine = strtolower($this->sanitizeString($data['airway_cspine'] ?? ''));
+        $this->breathingStatus = strtolower($this->sanitizeString($data['breathing_status'] ?? ''));
+        $this->circulationStatus = strtolower($this->sanitizeString($data['circulation_status'] ?? ''));
+        $this->gcsDisabilityStatus = strtolower($this->sanitizeString($data['gcs_disability_status'] ?? ''));
+        $this->exposureStatus = strtolower($this->sanitizeString($data['exposure_status'] ?? ''));
+        $this->prehospitalStatus = strtolower($this->sanitizeString($data['prehospital_status'] ?? ''));
+        $this->anamnesis = $this->sanitizeString($data['anamnesis'] ?? '');
+        $this->diagnosis = $this->sanitizeString($data['diagnosis'] ?? '');
+        $this->therapy = $this->sanitizeString($data['therapy'] ?? '');
+        $this->actionsTaken = $this->sanitizeString($data['actions_taken'] ?? '');
+        $this->finderFullName = $this->sanitizeString($data['finder_full_name'] ?? '');
+        $this->finderAge = (int) ($data['finder_age'] ?? 0);
+        $this->finderGender = strtolower($this->sanitizeString($data['finder_gender'] ?? ''));
+        $this->finderAddress = $this->sanitizeString($data['finder_address'] ?? '');
+        $this->finderPhoneNumber = $this->sanitizeString($data['finder_phone_number'] ?? '');
+        $this->confirmationDatetime = $data['confirmation_datetime'] ?? '';
+        $this->confirmationIssue = $this->sanitizeString($data['confirmation_issue'] ?? '');
+        $this->confirmationTherapy = $this->sanitizeString($data['confirmation_therapy'] ?? '');
+    }
+
+    /**
      * Validate patient data
      *
      * @return array<string, string> Array of validation errors if any
@@ -405,6 +450,166 @@ class Patient extends Model
         }
 
         return $errors; // Return any validation errors found
+    }
+
+    /**
+     * Validate patient resume data
+     *
+     * @return array<string, string> Array of validation errors if any
+     */
+    public function validateResume(): array
+    {
+        $errors = [];
+
+        // Validate referral information
+        if (empty($this->isReferenced)) {
+            $errors['referral']['is_referenced'] = 'Silahkan pilih pasien dirujuk atau tidak.';
+        }
+        if (!in_array($this->referralSource, self::VALID_REFERRAL_SOURCES, true)) {
+            $errors['referral']['referral_source'] = 'Keterangan atau sumber rujukan tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+
+        // Validate disaster medical records
+        if (!in_array($this->disasterType, self::VALID_DISASTER_TYPES, true)) {
+            $errors['disaster']['disaster_type'] = 'Jenis bencana tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+        if (!in_array($this->injuryType, self::VALID_INJURY_TYPES, true)) {
+            $errors['disaster']['injury_type'] = 'Jenis cedera tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+
+        // Validate local status
+        if (!in_array($this->localStatusRange, self::VALID_LOCAL_STATUS_RANGE, true)) {
+            $errors['medical']['local_status_range'] = 'Lokal status tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+        if (!in_array($this->localStatusColor, self::VALID_LOCAL_STATUS_COLORS, true)) {
+            $errors['medical']['local_status_color'] = 'Warna lokal status tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+        if (empty($this->allergies)) {
+            $errors['medical']['allergies'] = "Alergi tidak boleh kosong, silahkan isi dengan informasi yang sesuai atau '-' jika tidak ada.";
+        }
+
+        // Validate discovery details
+        if (empty($this->discoveryTimestamp)) {
+            $errors['discovery']['timestamp'] = 'Waktu penemuan tidak boleh kosong, silahkan isi dengan informasi yang sesuai.';
+        } else {
+            try {
+                $dateTime = DateTime::createFromFormat('Y-m-d\TH:i', $this->discoveryTimestamp);
+                if ($dateTime === false) {
+                    throw new Exception();
+                } else if ($dateTime > new DateTime()) {
+                    $errors['discovery']['timestamp'] = 'Waktu penemuan tidak boleh di masa depan.';
+                }
+            } catch (\Exception $e) {
+                $errors['discovery']['timestamp'] = 'Format waktu penemuan tidak valid, silahkan gunakan format YYYY-MM-DDTHH:MM.';
+            }
+        }
+        if (empty($this->discoveryLocation)) {
+            $errors['discovery']['location'] = 'Lokasi penemuan tidak boleh kosong, silahkan isi dengan informasi yang sesuai.';
+        }
+
+        // Validate vital signs
+        if (empty($this->vitalSignBloodPressure)) {
+            $errors['vital_sign']['blood_pressure'] = 'Tekanan darah tidak boleh kosong, silahkan isi dengan informasi yang sesuai.';
+        }
+        if ($this->vitalSignPulse < 20 || $this->vitalSignPulse > 250) {
+            $errors['vital_sign']['pulse'] = 'Denyut nadi harus berada di antara 20-250 bpm. Nilai normal adalah 60-100 bpm.';
+        }
+        if ($this->vitalSignRespiratoryRate < 4 || $this->vitalSignRespiratoryRate > 60) {
+            $errors['vital_sign']['respiratory_rate'] = 'Frekuensi pernapasan harus berada di antara 4-60 x/menit. Nilai normal adalah 12-20 x/menit.';
+        }
+        if ($this->vitalSignTemperature < 32 || $this->vitalSignTemperature > 42) {
+            $errors['vital_sign']['temperature'] = 'Suhu tubuh harus berada di antara 32-42°C. Nilai normal adalah 36.5-37.5°C.';
+        }
+
+        // Validate condition patient
+        if (!in_array($this->conditionColor, self::VALID_CONDITION_COLORS, true)) {
+            $errors['patient']['condition_color'] = 'Warna kondisi pasien tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+
+        // Validate initial examination
+        if (!in_array($this->pupilStatus, self::VALID_PUPIL_STATUS, true)) {
+            $errors['examination']['pupil_status'] = 'Status pupil tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+        if ($this->lightReflexLeft < 0 || $this->lightReflexLeft > 10) {
+            $errors['examination']['light_reflex_left'] = 'Refleks cahaya kiri harus berada di antara 0-10 mm. Nilai normal adalah 2-4 mm.';
+        }
+        if ($this->lightReflexRight < 0 || $this->lightReflexRight > 10) {
+            $errors['examination']['light_reflex_right'] = 'Refleks cahaya kanan harus berada di antara 0-10 mm. Nilai normal adalah 2-4 mm.';
+        }
+        if (!in_array($this->airwayCSpine, self::VALID_AIRWAY_CSPINE, true)) {
+            $errors['examination']['airway_cspine'] = 'Airway C-Spine tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+        if (!in_array($this->breathingStatus, self::VALID_BREATHING_STATUS, true)) {
+            $errors['examination']['breathing_status'] = 'Kondisi pernapasan tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+        if (!in_array($this->circulationStatus, self::VALID_CIRCULATION_STATUS, true)) {
+            $errors['examination']['circulation_status'] = 'Kondisi sirkulasi tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+        if (!in_array($this->gcsDisabilityStatus, self::VALID_GCS_DISABILITY_STATUS, true)) {
+            $errors['examination']['gcs_disability_status'] = 'Status disabilitas GCS tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+        if (!in_array($this->exposureStatus, self::VALID_EXPOSURE_STATUS, true)) {
+            $errors['examination']['exposure_status'] = 'Status eksposur tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+        if (!in_array($this->prehospitalStatus, self::VALID_PREHOSPITAL_STATUS, true)) {
+            $errors['examination']['prehospital_status'] = 'Status pra-rumah sakit tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+
+        // Validate medical details
+        if (empty($this->anamnesis)) {
+            $errors['medical_details']['anamnesis'] = 'Anamnesis tidak boleh kosong, silahkan isi dengan informasi yang sesuai.';
+        }
+        if (empty($this->diagnosis)) {
+            $errors['medical_details']['diagnosis'] = 'Diagnosis tidak boleh kosong, silahkan isi dengan informasi yang sesuai.';
+        }
+        if (empty($this->therapy)) {
+            $errors['medical_details']['therapy'] = 'Terapi tidak boleh kosong, silahkan isi dengan informasi yang sesuai.';
+        }
+        if (empty($this->actionsTaken)) {
+            $errors['medical_details']['actions_taken'] = 'Tindakan yang diambil tidak boleh kosong, silahkan isi dengan informasi yang sesuai.';
+        }
+
+        // Validate finder's details
+        if (empty($this->finderFullName)) {
+            $errors['finder']['full_name'] = 'Nama penemu tidak boleh kosong, silahkan isi dengan informasi yang sesuai.';
+        }
+        if ($this->finderAge < 0 || $this->finderAge > 120) {
+            $errors['finder']['age'] = 'Usia penemu harus berada di antara 0-120 tahun.';
+        }
+        if (!in_array($this->finderGender, self::VALID_GENDERS, true)) {
+            $errors['finder']['gender'] = 'Jenis kelamin penemu tidak valid, silahkan pilih opsi yang tersedia.';
+        }
+        if (empty($this->finderAddress)) {
+            $errors['finder']['address'] = 'Alamat penemu tidak boleh kosong, silahkan isi dengan informasi yang sesuai.';
+        }
+        if (!preg_match('/^\+?[\d-]{10,15}$/', $this->finderPhoneNumber)) {
+            $errors['finder']['phone_number'] = 'Nomor telepon penemu tidak valid, silahkan isi dengan informasi yang sesuai. Contoh: 081234567890.';
+        }
+
+        // Validate additional confirmation
+        if (empty($this->confirmationDatetime)) {
+            $errors['confirmation']['datetime'] = 'Tanggal dan Waktu tidak boleh kosong, silahkan isi dengan informasi yang sesuai.';
+        } else {
+            try {
+                $confirmationDatetime = DateTime::createFromFormat('Y-m-d\TH:i', $this->confirmationDatetime);
+                if ($confirmationDatetime === false) {
+                    throw new Exception();
+                } else if ($confirmationDatetime > new DateTime()) {
+                    $errors['confirmation']['datetime'] = 'Tanggal dan waktu konfirmasi tidak boleh di masa depan.';
+                }
+            } catch (\Exception $e) {
+                $errors['confirmation']['datetime'] = 'Format tanggal dan waktu tidak valid.';
+            }
+        }
+        if (empty($this->confirmationIssue)) {
+            $errors['confirmation']['issue'] = 'Masalah tidak boleh kosong, silahkan isi dengan informasi yang sesuai.';
+        }
+        if (empty($this->confirmationTherapy)) {
+            $errors['confirmation']['therapy'] = 'Terapi tidak boleh kosong, silahkan isi dengan informasi yang sesuai.';
+        }
+
+        // Return any validation errors found
+        return $errors;
     }
 
     /**
@@ -529,6 +734,7 @@ class Patient extends Model
 
         if ($patientData = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $this->setProperties($patientData);
+            $this->setResumeProperties($patientData);
             return true;
         }
 
@@ -598,8 +804,8 @@ class Patient extends Model
     public function getVitalSignTemperature(): float { return $this->vitalSignTemperature; }
     public function getConditionColor(): string { return $this->conditionColor; }
     public function getPupilStatus(): string { return $this->pupilStatus; }
-    public function getLightReflexLeft(): bool { return $this->lightReflexLeft; }
-    public function getLightReflexRight(): bool { return $this->lightReflexRight; }
+    public function getLightReflexLeft(): float { return $this->lightReflexLeft; }
+    public function getLightReflexRight(): float { return $this->lightReflexRight; }
     public function getAirwayCSpine(): string { return $this->airwayCSpine; }
     public function getBreathingStatus(): string { return $this->breathingStatus; }
     public function getCirculationStatus(): string { return $this->circulationStatus; }

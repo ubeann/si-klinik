@@ -48,6 +48,7 @@ $router->addRoute('/patients/delete', PatientController::class, 'delete');
 $router->addRoute('/resume', ResumeController::class, 'index');
 $router->addRoute('/resume/form', ResumeController::class, 'form');
 $router->addRoute('/resume/save', ResumeController::class, 'save');
+$router->addRoute('/resume/download', ResumeController::class, 'downloadCSV');
 
 // Disease routes
 $router->addRoute('/disease', DiseaseController::class, 'index');

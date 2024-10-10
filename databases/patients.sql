@@ -43,8 +43,8 @@ CREATE TABLE patients (
 
     -- Initial examination (Pemeriksaan Awal)
     pupil_status VARCHAR(50),                   -- Pupil examination status (isokor/arisokor)
-    light_reflex_left BOOLEAN,                  -- Light reflex on the left (Reflek Cahaya)
-    light_reflex_right BOOLEAN,                 -- Light reflex on the right (Reflek Cahaya)
+    light_reflex_left DECIMAL(5, 2),            -- Light reflex on the left (Reflek Cahaya)
+    light_reflex_right DECIMAL(5, 2),           -- Light reflex on the right (Reflek Cahaya)
     airway_c_spine VARCHAR(50),                 -- Airway and C-spine status
     breathing_status VARCHAR(50),               -- Breathing status (Breathing)
     circulation_status VARCHAR(50),             -- Circulation status (Circulation)

@@ -100,4 +100,63 @@ class ResumeController extends Controller
         // Render the resume form view (located in the 'views/resume/form.php' file).
         $this->view('resume/form', ['patient' => $patient, 'id' => $_GET['id']]);
     }
+
+    /**
+     * Save the submitted resume for a patient.
+     *
+     * This method handles the "save" action for the resume page.
+     * It validates the submitted form data and saves the resume to the database.
+     * If the form data is invalid, error messages are stored in the session.
+     *
+     * @return void
+     */
+    public function save(): void
+    {
+        // Redirect to the form page if the request method is not POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: '. '/resume/form?id=' . $_GET['id']);
+            exit;
+        }
+
+        // Initialize an instance of the Patient model
+        $patient = new Patient();
+
+        // Get the patient record with the specified ID
+        $patient->load($_GET['id']);
+
+        // Set properties of the patient object
+        $patient->setResumeProperties($_POST);
+
+        // Validate the form data
+        $errors = $patient->validateResume($_POST);
+
+        // When there are validation errors, store the errors in the session
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+
+            // Redirect back to the resume form
+            header('Location: '. '/resume/form?id=' . $_GET['id']);
+            exit;
+        }
+
+        // TODO: Update the patient record in the database
+        $patient->update($_GET['id']);
+
+        // Create a success message
+        $_SESSION['success'] = 'Resume data has been successfully saved.';
+
+        // Redirect to the patient list page
+        header('Location: '. '/resume');
+        exit;
+    }
+
+     /**
+     * Download the list of resume patients as a CSV file.
+     *
+     * This method handles the "downloadCSV" action for the resume page.
+     * It retrieves the list of patients from the database and generates a CSV file
+     * containing the patient data. The CSV file is then downloaded by the user.
+     *
+     * @return void
+     */
 }
