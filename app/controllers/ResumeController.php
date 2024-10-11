@@ -159,4 +159,138 @@ class ResumeController extends Controller
      *
      * @return void
      */
+    public function downloadCSV(): void
+    {
+        // Initialize an instance of the Patient model
+        $patient = new Patient();
+
+        // Get all patients from the database
+        $patients = $patient->getAll();
+
+        // Set the HTTP header to force download the CSV file
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="patient_records_' . date('Y-m-d') . '.csv"');
+
+        // Open a file pointer connected to the output stream
+        $fp = fopen('php://output', 'w');
+
+        // Write the CSV header row with all columns
+        fputcsv($fp, [
+            'No. Rekam Medis',
+            'Tanggal Registrasi',
+            'No. KTP/Passport',
+            'Nama Lengkap',
+            'Alamat',
+            'Jenis Kelamin',
+            'Tanggal Lahir',
+            'Penjamin',
+            'No. Telepon',
+            'Agama',
+            'Pekerjaan',
+            'Pendidikan',
+            'Status Pernikahan',
+            'Status Rujukan',
+            'Sumber Rujukan',
+            'Jenis Bencana',
+            'Jenis Cedera',
+            'Rentang Status Lokal',
+            'Warna Status Lokal',
+            'Alergi',
+            'Waktu Ditemukan',
+            'Lokasi Ditemukan',
+            'Tekanan Darah',
+            'Denyut Nadi',
+            'Laju Pernapasan',
+            'Suhu Tubuh',
+            'Kode Kondisi',
+            'Status Pupil',
+            'Refleks Cahaya Kiri',
+            'Refleks Cahaya Kanan',
+            'Status Airway/C-Spine',
+            'Status Breathing',
+            'Status Circulation',
+            'Status GCS Disability',
+            'Status Exposure',
+            'Status Prehospital',
+            'Anamnesis',
+            'Diagnosis',
+            'Terapi',
+            'Tindakan',
+            'Nama Penemu',
+            'Usia Penemu',
+            'Jenis Kelamin Penemu',
+            'Alamat Penemu',
+            'No. Telepon Penemu',
+            'Waktu Konfirmasi',
+            'Masalah Konfirmasi',
+            'Terapi Konfirmasi',
+            'Status Pasien'
+        ]);
+
+        // Write the patient data to the CSV file
+        foreach ($patients as $row) {
+            // Set the patient properties
+            $patient->setProperties($row);
+            $patient->setResumeProperties($row);
+
+            // Write the patient data row
+            fputcsv($fp, [
+                $patient->getMedicalRecordNumber(),
+                $patient->getRegistrationDate(),
+                $patient->getNationalIdNumber(),
+                $patient->getFullName(),
+                $patient->getAddress(),
+                $patient->getGenderLabel(),
+                $patient->getBirthDate(),
+                $patient->getGuarantor(),
+                $patient->getPhoneNumber(),
+                $patient->getReligionLabel(),
+                $patient->getOccupation(),
+                $patient->getEducationLabel(),
+                $patient->getMaritalStatusLabel(),
+                $patient->getIsReferenced() ? 'Ya' : 'Tidak',
+                $patient->getReferralSourceLabel(),
+                $patient->getDisasterTypeLabel(),
+                $patient->getInjuryTypeLabel(),
+                $patient->getLocalStatusRange(),
+                $patient->getLocalStatusColorLabel(),
+                $patient->getAlergies(),
+                $patient->getDiscoveryTimestamp(),
+                $patient->getDiscoveryLocation(),
+                $patient->getVitalSignBloodPressure(),
+                $patient->getVitalSignPulse(),
+                $patient->getVitalSignRespiratoryRate(),
+                $patient->getVitalSignTemperature(),
+                $patient->getConditionColorLabel(),
+                $patient->getPupilStatusLabel(),
+                $patient->getLightReflexLeft(),
+                $patient->getLightReflexRight(),
+                $patient->getAirwayCSpineLabel(),
+                $patient->getBreathingStatusLabel(),
+                $patient->getCirculationStatusLabel(),
+                $patient->getGcsDisabilityStatusLabel(),
+                $patient->getExposureStatusLabel(),
+                $patient->getPrehospitalStatusLabel(),
+                $patient->getAnamnesis(),
+                $patient->getDiagnosis(),
+                $patient->getTherapy(),
+                $patient->getActionsTaken(),
+                $patient->getFinderFullName(),
+                $patient->getFinderAge(),
+                $patient->getFinderGenderLabel(),
+                $patient->getFinderAddress(),
+                $patient->getFinderPhoneNumber(),
+                $patient->getConfirmationDatetime(),
+                $patient->getConfirmationIssue(),
+                $patient->getConfirmationTherapy(),
+                $patient->getStatusLabel()
+            ]);
+        }
+
+        // Close the file pointer
+        fclose($fp);
+
+        // Exit the script
+        exit;
+    }
 }

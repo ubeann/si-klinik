@@ -36,7 +36,7 @@ use function App\Helpers\route;
         <div class="header">
             <div>
                 <!-- Download CSV Button -->
-                <a href="<?= route('resume/download/csv') ?>" class="download-button">
+                <a href="<?= route('resume/download') ?>" class="download-button">
                     <i class="fas fa-download"></i> Unduh Data Pasien
                 </a>
             </div>

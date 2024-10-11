@@ -176,6 +176,7 @@ class Patient extends Model
         'retraction',           // Retraksi
         'nasal-flaring',        // Nasal Flaring
         'abnormal-position',    // Posisi Abnormal
+        'other'                 // Lain-lain (Other)
     ];
     private const VALID_CIRCULATION_STATUS = [
         'pallor',               // Pucat (Pallor)
@@ -203,6 +204,23 @@ class Patient extends Model
         'balut',                // Balut/Bi
         'obat'                  // Obat
     ];
+
+    /**
+     * Get all patients without filtering
+     *
+     * @return array An array of patients
+     */
+    public function getAll(): array
+    {
+        // SQL query to retrieve all patients
+        $sql = "SELECT * FROM {$this->table} ORDER BY registration_date DESC";
+
+        // Execute the query
+        $stmt = $this->query($sql);
+
+        // Fetch and return all patient records
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
     /**
@@ -926,4 +944,197 @@ class Patient extends Model
     public function getConfirmationDatetime(): string { return $this->confirmationDatetime; }
     public function getConfirmationIssue(): string { return $this->confirmationIssue; }
     public function getConfirmationTherapy(): string { return $this->confirmationTherapy; }
+
+    // Label getters
+    public function getGenderLabel(): string
+    {
+        switch ($this->gender) {
+            case 'l': return 'Laki-laki';
+            case 'p': return 'Perempuan';
+            default: return '';
+        }
+    }
+    public function getReligionLabel(): string
+    {
+        switch ($this->religion) {
+            case 'islam': return 'Islam';
+            case 'catholic': return 'Katolik';
+            case 'protestant': return 'Protestan';
+            case 'hindu': return 'Hindu';
+            case 'buddha': return 'Buddha';
+            case 'other': return 'Lainnya';
+            default: return '';
+        }
+    }
+    public function getEducationLabel(): string { return strtoupper($this->education); }
+    public function getMaritalStatusLabel(): string
+    {
+        switch ($this->maritalStatus) {
+            case 'single': return 'Lajang';
+            case 'married': return 'Menikah';
+            case 'divorced': return 'Cerai';
+            case 'widowed': return 'Duda/Janda';
+            default: return '';
+        }
+    }
+    public function getStatusLabel(): string
+    {
+        switch ($this->status) {
+            case 'not-filled': return 'Belum Diisi';
+            case 'incomplete': return 'Belum Lengkap';
+            case 'filled': return 'Lengkap';
+            default: return '';
+        }
+    }
+    public function getReferralSourceLabel(): string
+    {
+        switch ($this->referralSource) {
+            case 'hospital': return 'RS (Rumah Sakit)';
+            case 'clinic': return 'Pusk (Puskesmas)';
+            case 'doctor': return 'Dr (Dokter)';
+            case 'midwife': return 'Bidan';
+            case 'nurse': return 'Perawat';
+            case 'emergency_rj_rsd': return 'RJ-RSD (Emergency room)';
+            case 'rna': return 'RNA (Rawat Naik Ambulan)';
+            case 'sds': return 'SDS (Sarana Darurat Siaga)';
+            case 'other': return 'Lain-lain';
+            default: return '';
+        }
+    }
+    public function getDisasterTypeLabel(): string
+    {
+        switch ($this->disasterType) {
+            case 'earthquake': return 'Gempa Bumi';
+            case 'tsunami': return 'Tsunami';
+            case 'flood': return 'Banjir';
+            case 'landslide': return 'Tanah Longsor';
+            case 'fire': return 'Kebakaran';
+            case 'epidemic': return 'Wabah';
+            case 'other': return 'Lain-lain';
+            default: return '';
+        }
+    }
+    public function getInjuryTypeLabel(): string
+    {
+        switch ($this->injuryType) {
+            case 'blunt_force': return 'Tumpul';
+            case 'sharp_object': return 'Tajam';
+            case 'gunshot': return 'Peluru';
+            case 'burn': return 'Bakar';
+            case 'poisoning': return 'Keracunan';
+            case 'drowning': return 'Tenggelam';
+            case 'asphyxia': return 'Afiksia';
+            case 'other': return 'Lain-lain';
+            default: return '';
+        }
+    }
+    public function getLocalStatusColorLabel(): string
+    {
+        switch ($this->localStatusColor) {
+            case 'green': return 'Hijau';
+            case 'yellow': return 'Kuning';
+            case 'red': return 'Merah';
+            case 'black': return 'Hitam';
+            case 'white': return 'Putih';
+            case 'blue': return 'Biru';
+            case 'orange': return 'Oranye';
+            case 'other': return 'Lain-lain';
+            default: return '';
+        }
+    }
+    public function getConditionColorLabel(): string
+    {
+        switch ($this->conditionColor) {
+            case 'p1': return 'P1 (Gawat dan Darurat)';
+            case 'p2': return 'P2 (Gawat dan Tidak Darurat)';
+            case 'p3': return 'P3 (Tidak Gawat dan Tidak Darurat)';
+            case 'p4': return 'P4 (Meninggal)';
+            default: return '';
+        }
+    }
+    public function getPupilStatusLabel(): string
+    {
+        switch ($this->pupilStatus) {
+            case 'isokor': return 'Isokor';
+            case 'anisokor': return 'Anisokor';
+            case 'miotic': return 'Miotik';
+            case 'mydriatic': return 'Midriatik';
+            case 'other': return 'Lain-lain';
+            default: return '';
+        }
+    }
+    public function getAirwayCSpineLabel(): string
+    {
+        switch ($this->airwayCSpine) {
+            case 'clear': return 'Bersih';
+            case 'sputum': return 'Slem Sumbatan';
+            case 'partial': return 'Parsial';
+            case 'total': return 'Sumbatan Total';
+            case 'other': return 'Lain-lain';
+            default: return '';
+        }
+    }
+    public function getBreathingStatusLabel(): string
+    {
+        switch ($this->breathingStatus) {
+            case 'normal': return 'Normal';
+            case 'wheezing': return 'Wheezing';
+            case 'ronchi': return 'Ronchi';
+            case 'retraction': return 'Retraksi';
+            case 'nasal-flaring': return 'Nasal Flaring';
+            case 'abnormal-position': return 'Posisi Abnormal';
+            case 'other': return 'Lain-lain';
+            default: return '';
+        }
+    }
+    public function getCirculationStatusLabel(): string
+    {
+        switch ($this->circulationStatus) {
+            case 'pallor': return 'Pallor';
+            case 'mottling': return 'Motling';
+            case 'cyanosis': return 'Cyanosis';
+            case 'capillary-refill': return 'Capillary Refill';
+            default: return '';
+        }
+    }
+    public function getGcsDisabilityStatusLabel(): string
+    {
+        switch ($this->gcsDisabilityStatus) {
+            case 'eye-movement': return 'Eye Movement';
+            case 'motor-reflex': return 'Reflek Motorik';
+            case 'verbal': return 'Verbal';
+            default: return '';
+        }
+    }
+    public function getExposureStatusLabel(): string
+    {
+        switch ($this->exposureStatus) {
+            case 'bleeding': return 'Pendarahan';
+            case 'fracture': return 'Fraktur';
+            case 'paralysis': return 'Parase';
+            case 'plegia': return 'Plegi';
+            case 'paraparesis': return 'Paraperesis';
+            default: return '';
+        }
+    }
+    public function getPrehospitalStatusLabel(): string
+    {
+        switch ($this->prehospitalStatus) {
+            case 'rjp': return 'RJP (Resusitasi Jantung Paru)';
+            case 'intubasi': return 'Intubasi';
+            case 'oksigen': return 'Oksigen';
+            case 'ecollar': return 'Ecollar';
+            case 'balut': return 'Balut/Bi';
+            case 'obat': return 'Obat';
+            default: return '';
+        }
+    }
+    public function getFinderGenderLabel(): string
+    {
+        switch ($this->finderGender) {
+            case 'l': return 'Laki-laki';
+            case 'p': return 'Perempuan';
+            default: return '';
+        }
+    }
 }
