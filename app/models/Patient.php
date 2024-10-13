@@ -206,6 +206,24 @@ class Patient extends Model
     ];
 
     /**
+     * Count the total number of patients
+     *
+     * @return int The total number of patients
+     */
+    public function count(): int
+    {
+        // SQL query to count the total number of patients
+        $sql = "SELECT COUNT(*) FROM {$this->table}";
+
+        // Execute the query
+        $stmt = $this->query($sql);
+
+        // Fetch and return the total number of patients
+        return $stmt->fetchColumn();
+    }
+
+
+    /**
      * Get all patients without filtering
      *
      * @return array An array of patients

@@ -3,6 +3,9 @@
 namespace App\Controllers;
 
 use App\Controllers\Controller;
+use App\Models\Disease;
+use App\Models\Epidemiologi;
+use App\Models\Patient;
 
 /**
  * HomeController
@@ -66,7 +69,21 @@ class HomeController extends Controller
             exit;
         }
 
+        // Initialize some models
+        $diseaseModel = new Disease();
+        $epidemiologiModel = new Epidemiologi();
+        $patientModel = new Patient();
+
+        // Count the total number of patients
+        $totalDiseases = number_format($diseaseModel->count());
+        $totalEpidemiologis = number_format($epidemiologiModel->count());
+        $totalPatients = number_format($patientModel->count());
+
         // Render the dashboard view (located in the 'views/home/dashboard.php' file).
-        $this->view('home/dashboard');
+        $this->view('home/dashboard', [
+            'totalPatients' => $totalPatients,
+            'totalDiseases' => $totalDiseases,
+            'totalEpidemiologis' => $totalEpidemiologis,
+        ]);
     }
 }

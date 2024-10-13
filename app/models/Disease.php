@@ -29,6 +29,23 @@ class Disease extends Model
     private const VALID_STATUSES = ['active', 'inactive'];
 
     /**
+     * Count the total number of disease
+     *
+     * @return int The total number of disease
+     */
+    public function count(): int
+    {
+        // SQL query to count the total number of disease
+        $sql = "SELECT COUNT(*) FROM {$this->table}";
+
+        // Execute the query
+        $stmt = $this->query($sql);
+
+        // Fetch and return the total number of disease
+        return $stmt->fetchColumn();
+    }
+
+    /**
      * Get all disease without filtering
      *
      * @return array An array of disease

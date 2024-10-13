@@ -23,6 +23,23 @@ class Epidemiologi extends Model
     private const VALID_GENDERS = ['l', 'p'];
 
     /**
+     * Count the total number of epidemiologi
+     *
+     * @return int The total number of epidemiologi
+     */
+    public function count(): int
+    {
+        // SQL query to count the total number of epidemiologi
+        $sql = "SELECT COUNT(*) FROM {$this->table}";
+
+        // Execute the query
+        $stmt = $this->query($sql);
+
+        // Fetch and return the total number of epidemiologi
+        return $stmt->fetchColumn();
+    }
+
+    /**
      * Get all epidemiologi without filtering
      *
      * @return array An array of epidemiologi

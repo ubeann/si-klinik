@@ -76,21 +76,21 @@ use function App\Helpers\route;
                     <i class="fas fa-users widget-icon"></i>
                     <div class="widget-content">
                         <h3>Total Pasien</h3>
-                        <p class="widget-value" id="total-pasien">0</p>
+                        <p class="widget-value" id="total-pasien"><?= $totalPatients ?></p>
                     </div>
                 </a>
                 <a class="widget" id="penyakit-widget" href="<?= route('disease') ?>">
                     <i class="fas fa-atom widget-icon"></i>
                     <div class="widget-content">
                         <h3>Index Penyakit</h3>
-                        <p class="widget-value" id="index-penyakit">0</p>
+                        <p class="widget-value" id="index-penyakit"><?= $totalDiseases ?></p>
                     </div>
                 </a>
                 <a class="widget" id="epidemiologi-widget" href="<?= route('epidemiologi') ?>">
                     <i class="fas fa-skull-crossbones widget-icon"></i>
                     <div class="widget-content">
                         <h3>Epidemiologi</h3>
-                        <p class="widget-value" id="epidemiologi">0</p>
+                        <p class="widget-value" id="epidemiologi"><?= $totalEpidemiologis ?></p>
                     </div>
                 </a>
             </div>
