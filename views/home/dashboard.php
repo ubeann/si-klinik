@@ -11,7 +11,7 @@ use function App\Helpers\route;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Sistem Darurat Bencana</title>
     <link rel="stylesheet" href="<?= asset('css/home/dashboard.css') ?>">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -71,7 +71,28 @@ use function App\Helpers\route;
                 </div>
             </div>
             <h1>DASHBOARD SISTEM DARURAT BENCANA</h1><br>
-            <div class="container">
+            <div class="widget-container" style="margin-bottom: 40px;">
+                <a class="widget" id="pasien-widget" href="<?= route('patients') ?>">
+                    <i class="fas fa-users widget-icon"></i>
+                    <div class="widget-content">
+                        <h3>Total Pasien</h3>
+                        <p class="widget-value" id="total-pasien">0</p>
+                    </div>
+                </a>
+                <a class="widget" id="penyakit-widget" href="<?= route('disease') ?>">
+                    <i class="fas fa-atom widget-icon"></i>
+                    <div class="widget-content">
+                        <h3>Index Penyakit</h3>
+                        <p class="widget-value" id="index-penyakit">0</p>
+                    </div>
+                </a>
+                <a class="widget" id="epidemiologi-widget" href="<?= route('epidemiologi') ?>">
+                    <i class="fas fa-skull-crossbones widget-icon"></i>
+                    <div class="widget-content">
+                        <h3>Epidemiologi</h3>
+                        <p class="widget-value" id="epidemiologi">0</p>
+                    </div>
+                </a>
             </div>
             <div id="chart-container">
                 <h2>Laporan Kunjungan Pasien</h2>

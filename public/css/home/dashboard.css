@@ -128,3 +128,63 @@ body {
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+
+.widget-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.widget {
+    border-radius: 8px;
+    padding: 20px;
+    width: 30%;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    text-decoration: none;
+}
+
+.widget:hover {
+    transform: translateY(-5px);
+}
+
+#pasien-widget {
+    margin-left: 20px;
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+#penyakit-widget {
+    margin: 0 20px;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+#epidemiologi-widget {
+    margin-right: 20px;
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.widget-icon {
+    font-size: 2.5rem;
+    margin-right: 20px;
+}
+
+.widget-content {
+    flex-grow: 1;
+}
+
+.widget h3 {
+    margin-top: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.widget-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 5px 0 0;
+}
