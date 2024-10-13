@@ -206,6 +206,53 @@ class Patient extends Model
     ];
 
     /**
+     * Get the chart data for the dashboard
+     * X-axis: Month (Last 12 months)
+     * Y-axis: Number of patients on `P1`, `P2`, `P3`, and `P4` condition colors
+     *
+     * @return array An array of chart data
+     */
+    public function getChartData(): array
+    {
+        // Generate a series of months for the last year
+        $monthsSql = "
+        WITH RECURSIVE date_series(date) AS (
+            SELECT DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 11 MONTH)
+            UNION ALL
+            SELECT DATE_ADD(date, INTERVAL 1 MONTH)
+            FROM date_series
+            WHERE date < DATE_FORMAT(CURDATE(), '%Y-%m-01')
+        )
+        SELECT
+            DATE_FORMAT(date, '%Y-%m') AS month_key,
+            DATE_FORMAT(date, '%M') AS month_name
+        FROM date_series
+        ";
+
+        // Main query with left join to include all months
+        $sql = "
+        WITH months AS ($monthsSql)
+        SELECT
+            m.month_key,
+            m.month_name,
+            COALESCE(SUM(CASE WHEN p.condition_color = 'p1' THEN 1 ELSE 0 END), 0) AS p1,
+            COALESCE(SUM(CASE WHEN p.condition_color = 'p2' THEN 1 ELSE 0 END), 0) AS p2,
+            COALESCE(SUM(CASE WHEN p.condition_color = 'p3' THEN 1 ELSE 0 END), 0) AS p3,
+            COALESCE(SUM(CASE WHEN p.condition_color = 'p4' THEN 1 ELSE 0 END), 0) AS p4
+        FROM months m
+        LEFT JOIN {$this->table} p ON DATE_FORMAT(p.registration_date, '%Y-%m') = m.month_key
+        GROUP BY m.month_key, m.month_name
+        ORDER BY m.month_key
+        ";
+
+        // Execute the query
+        $stmt = $this->query($sql);
+
+        // Fetch and return the chart data
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Count the total number of patients
      *
      * @return int The total number of patients

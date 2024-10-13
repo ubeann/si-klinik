@@ -79,11 +79,15 @@ class HomeController extends Controller
         $totalEpidemiologis = number_format($epidemiologiModel->count());
         $totalPatients = number_format($patientModel->count());
 
+        // Get chart data
+        $chartData = $patientModel->getChartData();
+
         // Render the dashboard view (located in the 'views/home/dashboard.php' file).
         $this->view('home/dashboard', [
             'totalPatients' => $totalPatients,
             'totalDiseases' => $totalDiseases,
             'totalEpidemiologis' => $totalEpidemiologis,
+            'data' => $chartData,
         ]);
     }
 }

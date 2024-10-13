@@ -104,41 +104,95 @@ use function App\Helpers\route;
     <!-- Include Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Setup the chart
+        // Get the chart data from PHP
+        const chartData = <?php echo json_encode($data); ?>;
+
+        // Prepare the data for Chart.js
+        const labels = chartData.map(item => item.month_name);
+        const p1Data = chartData.map(item => parseInt(item.p1));
+        const p2Data = chartData.map(item => parseInt(item.p2));
+        const p3Data = chartData.map(item => parseInt(item.p3));
+        const p4Data = chartData.map(item => parseInt(item.p4));
+
+        // Create the chart
         const ctx = document.getElementById('patientVisitChart').getContext('2d');
-        const patientVisitChart = new Chart(ctx, {
+
+        // Candy-like colors
+        const candyRed = 'rgba(255, 87, 87, 1)';
+        const candyYellow = 'rgba(255, 206, 84, 1)';
+        const candyGreen = 'rgba(111, 207, 151, 1)';
+        const candyPurple = 'rgba(156, 136, 255, 1)';
+
+        // Setup gradient fill for the chart
+        const gradient1 = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient1.addColorStop(0, 'rgba(255, 87, 87, 0.6)');
+        gradient1.addColorStop(1, 'rgba(255, 87, 87, 0.1)');
+
+        const gradient2 = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient2.addColorStop(0, 'rgba(255, 206, 84, 0.6)');
+        gradient2.addColorStop(1, 'rgba(255, 206, 84, 0.1)');
+
+        const gradient3 = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient3.addColorStop(0, 'rgba(111, 207, 151, 0.6)');
+        gradient3.addColorStop(1, 'rgba(111, 207, 151, 0.1)');
+
+        const gradient4 = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient4.addColorStop(0, 'rgba(156, 136, 255, 0.6)');
+        gradient4.addColorStop(1, 'rgba(156, 136, 255, 0.1)');
+
+        new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['2024-09', '2024-10', '2024-11', '2024-12'],
-                datasets: [{
-                        label: 'Pasien Lama',
-                        data: [15, 45, 30, 21],
-                        borderColor: 'green',
-                        fill: false
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'P1 - Gawat Dan Darurat',
+                        data: p1Data,
+                        borderColor: candyRed,
+                        backgroundColor: gradient1,
+                        fill: true,
+                        tension: 0.4
                     },
                     {
-                        label: 'Pasien Baru',
-                        data: [0, 10, 5, 0],
-                        borderColor: 'purple',
-                        fill: false
+                        label: 'P2 - Gawat Tidak Darurat',
+                        data: p2Data,
+                        borderColor: candyYellow,
+                        backgroundColor: gradient2,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'P3 - Tidak Gawat Dan Tidak Darurat',
+                        data: p3Data,
+                        borderColor: candyGreen,
+                        backgroundColor: gradient3,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'P4 - Meninggal',
+                        data: p4Data,
+                        borderColor: candyPurple,
+                        backgroundColor: gradient4,
+                        fill: true,
+                        tension: 0.4
                     }
                 ]
             },
             options: {
                 responsive: true,
                 scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Bulan'
-                        }
-                    },
                     y: {
-                        title: {
-                            display: true,
-                            text: 'Jumlah Pasien'
-                        },
                         beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Laporan Kunjungan Pasien Dalam 1 Tahun (per Bulan)'
                     }
                 }
             }
