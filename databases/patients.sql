@@ -72,4 +72,8 @@ CREATE TABLE patients (
 
     -- Additional information
     status VARCHAR(50) -- Current status of the patient (e.g., Active, Discharged)
+
+    -- Timestamps for record keeping
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp when the record was created
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Timestamp when the record was last updated
 );
